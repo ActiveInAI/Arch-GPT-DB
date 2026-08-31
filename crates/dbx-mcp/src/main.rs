@@ -5,6 +5,7 @@ use rmcp::ServiceExt;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    dbx_core::install_arch_gpt_db_environment_aliases();
     dbx_core::install_pandb_environment_aliases();
     let backend: Arc<dyn DbxBackend> = if let Some(base_url) = env_value("PANDB_WEB_URL", "DBX_WEB_URL") {
         Arc::new(

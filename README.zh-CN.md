@@ -16,7 +16,7 @@
   <tr>
     <td width="50%">
       <h3>🪶 20 MB，极致轻量</h3>
-      <p>无需 Java 运行环境，无需 Python 虚拟环境，不内嵌 Chromium。PanDB 是单个小巧的二进制文件——下载、安装、连接。DBeaver 依赖 Java；TablePlus 仅限 macOS。PanDB 全平台可用，无需额外运行时。</p>
+      <p>无需 Java 运行环境，无需 Python 虚拟环境，不内嵌 Chromium。Arch-GPT DB 是单个小巧的二进制文件——下载、安装、连接。DBeaver 依赖 Java；TablePlus 仅限 macOS。Arch-GPT DB 全平台可用，无需额外运行时。</p>
     </td>
     <td width="50%">
       <h3>🤖 AI 原生集成在编辑器里</h3>
@@ -26,7 +26,7 @@
   <tr>
     <td>
       <h3>🔌 MCP 协议：你的数据库，AI 就绪</h3>
-      <p>PanDB 原生支持 Model Context Protocol。Claude Code、Cursor、Windsurf 等 AI 编程助手可以直接通过你已配置的数据库连接查询数据。一次配置，处处可用。</p>
+      <p>Arch-GPT DB 原生支持 Model Context Protocol。Claude Code、Cursor、Windsurf 等 AI 编程助手可以直接通过你已配置的数据库连接查询数据。一次配置，处处可用。</p>
     </td>
     <td>
       <h3>🌐 桌面端 + Docker + Web</h3>
@@ -89,7 +89,7 @@ SSH 隧道（密钥和密码认证）· 数据库和 AI 代理设置 · 断线�
 
 ## AI 编程助手集成 (MCP)
 
-PanDB 提供 [MCP Server](packages/mcp-server/)，让 AI 编程助手直接使用 PanDB 中已配置的数据库连接查询数据。
+Arch-GPT DB 提供 [MCP Server](packages/mcp-server/)，让 AI 编程助手直接使用 Arch-GPT DB 中已配置的数据库连接查询数据。
 
 ```bash
 npx @dbx-app/mcp-server
@@ -105,13 +105,13 @@ npx @dbx-app/mcp-server
 }
 ```
 
-连接 allowlist 和“只读 / 数据读写 / 完全访问”三档执行权限统一在 PanDB 的“设置 → MCP”中管理。机器可读值仍为 `read_only`、`safe_write`、`high_risk_write`；客户端配置无需声明权限或连接范围环境变量。
+连接 allowlist 和“只读 / 数据读写 / 完全访问”三档执行权限统一在 Arch-GPT DB 的“设置 → MCP”中管理。机器可读值仍为 `read_only`、`safe_write`、`high_risk_write`；客户端配置无需声明权限或连接范围环境变量。
 
 为兼容升级，旧配置中的 `DBX_MCP_ALLOW_WRITES=0`（或 `false`）仅在中央 MCP 策略首次保存前继续作为只读限制；它不能开启写入，也不能覆盖已经保存的中央策略。
 
-Windows 便携版需要在 MCP 配置中设置 `PANDB_DATA_DIR`，指向 `PanDB.exe` 同级的 `data` 目录（即包含 `dbx.db` 的文件夹）。
+Windows 便携版需要在 MCP 配置中设置 `ARCH_GPT_DB_DATA_DIR`，指向 `Arch-GPT DB.exe` 同级的 `data` 目录（即包含 `dbx.db` 的文件夹）。
 
-如果连接的是 PanDB Web 或 Docker 部署，请让 MCP Server 指向 Web 后端 API。如果 Web 登录页需要密码，`PANDB_WEB_PASSWORD` 填写同一个 Web 登录密码：
+如果连接的是 Arch-GPT DB Web 或 Docker 部署，请让 MCP Server 指向 Web 后端 API。如果 Web 登录页需要密码，`ARCH_GPT_DB_WEB_PASSWORD` 填写同一个 Web 登录密码：
 
 ```json
 {
@@ -119,19 +119,19 @@ Windows 便携版需要在 MCP 配置中设置 `PANDB_DATA_DIR`，指向 `PanDB.
     "pandb": {
       "command": "pandb-mcp-server",
       "env": {
-        "PANDB_WEB_URL": "http://localhost:4224",
-        "PANDB_WEB_PASSWORD": "你的 Web 登录密码"
+        "ARCH_GPT_DB_WEB_URL": "http://localhost:4224",
+        "ARCH_GPT_DB_WEB_PASSWORD": "你的 Web 登录密码"
       }
     }
   }
 }
 ```
 
-支持 Claude Code、Cursor、Windsurf 等 MCP 兼容的 AI 助手。可列出连接、浏览表、执行 SQL，还能直接在 PanDB 界面中打开表。
+支持 Claude Code、Cursor、Windsurf 等 MCP 兼容的 AI 助手。可列出连接、浏览表、执行 SQL，还能直接在 Arch-GPT DB 界面中打开表。
 
 ## 安装
 
-PanDB 首个公开发行版正在准备中；当前请从源码构建，并按下方“快速开始”完成开发环境配置。已有安装在迁移期间保持兼容，但旧下载渠道不代表 PanDB 发行版。
+Arch-GPT DB 首个公开发行版正在准备中；当前请从源码构建，并按下方“快速开始”完成开发环境配置。已有安装在迁移期间保持兼容，但旧下载渠道不代表 Arch-GPT DB 发行版。
 
 ## 自托管 (Docker)
 
@@ -145,10 +145,10 @@ docker compose -f deploy/docker-compose.yml up --build
 
 ```yaml
 environment:
-  - PANDB_PUBLIC_BASE_PATH=/pandb
+  - ARCH_GPT_DB_PUBLIC_BASE_PATH=/pandb
 ```
 
-如果自行从源码构建前端并希望使用绝对资源路径，可在 `pnpm build` 前设置 `VITE_PANDB_BASE_PATH=/pandb/`。已有部署仍支持旧的 `DBX_*` 变量。
+如果自行从源码构建前端并希望使用绝对资源路径，可在 `pnpm build` 前设置 `VITE_ARCH_GPT_DB_BASE_PATH=/pandb/`。已有部署仍支持旧的 `DBX_*` 变量。
 
 ## 快速开始
 
@@ -186,7 +186,7 @@ make
 
 `make` 会在需要时安装根目录依赖，并启动本地 Tauri 桌面端开发环境。
 
-开发版可与已安装的 PanDB 同时运行，并共享本地连接和历史数据。请避免在两个窗口中同时修改同一个连接或全局设置。
+开发版可与已安装的 Arch-GPT DB 同时运行，并共享本地连接和历史数据。请避免在两个窗口中同时修改同一个连接或全局设置。
 
 > [!TIP]
 > DuckDB 从源码编译较慢。如果不涉及 DuckDB 功能，可以跳过以加速本地构建：
@@ -215,7 +215,7 @@ make dev-backend   # 后端
 make docs
 ```
 
-PanDB 官网文档位于 `docs/` 目录。如果你想贡献官网内容或文档页面，请修改 `docs/` 下的文件，并运行 `make docs` 在本地预览文档站。
+Arch-GPT DB 官网文档位于 `docs/` 目录。如果你想贡献官网内容或文档页面，请修改 `docs/` 下的文件，并运行 `make docs` 在本地预览文档站。
 
 需要干净、可重复创建的本地数据库实例时，可使用 [`deploy/database/`](deploy/database/README.zh-CN.md) 下的带版本 Docker Compose 配方：
 
@@ -253,8 +253,8 @@ make package
 
 ## 文档
 
-- [文档源码](https://github.com/ActiveInAI/PanDB/tree/main/docs) — 功能说明与使用教程
-- [数据库测试实验室](https://github.com/ActiveInAI/PanDB/tree/main/deploy/database) — 用于开发和验证的本地数据库配方
+- [文档源码](https://github.com/ActiveInAI/Arch-GPT-DB/tree/main/docs) — 功能说明与使用教程
+- [数据库测试实验室](https://github.com/ActiveInAI/Arch-GPT-DB/tree/main/deploy/database) — 用于开发和验证的本地数据库配方
 - [贡献指南](CONTRIBUTING.zh-CN.md) — 如何认领 Issue 并提交 PR
 - [Web API 参考](docs/content/docs/web-api.cn.mdx) — Docker/Web 部署的 HTTP API
 - [示例代码](examples/) — CLI、MCP、Docker 与 API 示例
@@ -262,24 +262,24 @@ make package
 ## 常见问题
 
 <details>
-<summary><strong>PanDB 是免费的吗？</strong></summary>
-是的。PanDB 基于 Apache-2.0 协议开源，所有功能均免费使用。
+<summary><strong>Arch-GPT DB 是免费的吗？</strong></summary>
+是的。Arch-GPT DB 基于 Apache-2.0 协议开源，所有功能均免费使用。
 </details>
 
 <details>
-<summary><strong>PanDB 会收集用户数据吗？</strong></summary>
-不会。PanDB 不收集任何遥测数据。自动更新功能仅检查 GitHub Releases 获取新版本——你可以在设置中禁用它。
+<summary><strong>Arch-GPT DB 会收集用户数据吗？</strong></summary>
+不会。Arch-GPT DB 不收集任何遥测数据。自动更新功能仅检查 GitHub Releases 获取新版本——你可以在设置中禁用它。
 </details>
 
 <details>
 <summary><strong>可以离线使用吗？</strong></summary>
 
-可以。桌面端完全支持离线使用。内网环境安装驱动时，可在有网机器获取所需 JDBC 制品，传输到内网机器后，在 PanDB 的「设置 > 驱动管理」中导入。AI 功能需要网络访问模型端点（或通过 Ollama 使用本地模型）。
+可以。桌面端完全支持离线使用。内网环境安装驱动时，可在有网机器获取所需 JDBC 制品，传输到内网机器后，在 Arch-GPT DB 的「设置 > 驱动管理」中导入。AI 功能需要网络访问模型端点（或通过 Ollama 使用本地模型）。
 </details>
 
 <details>
-<summary><strong>PanDB 和 DBeaver / TablePlus / Beekeeper Studio 有什么区别？</strong></summary>
-PanDB 仅 20 MB，无需运行时依赖（无需 Java、无需 Python）。AI 和 MCP 是原生内置功能，不是插件。单一代码库同时支持 70+ 数据库、桌面端、Docker 和 Web。
+<summary><strong>Arch-GPT DB 和 DBeaver / TablePlus / Beekeeper Studio 有什么区别？</strong></summary>
+Arch-GPT DB 仅 20 MB，无需运行时依赖（无需 Java、无需 Python）。AI 和 MCP 是原生内置功能，不是插件。单一代码库同时支持 70+ 数据库、桌面端、Docker 和 Web。
 </details>
 
 <details>
@@ -289,22 +289,22 @@ MySQL、PostgreSQL、SQLite、Cloudflare D1、Redis、MongoDB、DuckDB、ClickHo
 
 <details>
 <summary><strong>如何报告 Bug 或请求新功能？</strong></summary>
-在 <a href="https://github.com/ActiveInAI/PanDB/issues">GitHub Issues</a> 提交 Issue。
+在 <a href="https://github.com/ActiveInAI/Arch-GPT-DB/issues">GitHub Issues</a> 提交 Issue。
 </details>
 
 ## 贡献者
 
-<a href="https://github.com/ActiveInAI/PanDB/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=ActiveInAI/PanDB" />
+<a href="https://github.com/ActiveInAI/Arch-GPT-DB/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=ActiveInAI/Arch-GPT-DB" />
 </a>
 
 ## Star History
 
 <a href="https://www.star-history.com/?repos=ActiveInAI%2FPanDB&type=date&legend=top-left">
  <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=ActiveInAI/PanDB&type=date&theme=dark&legend=top-left" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=ActiveInAI/PanDB&type=date&legend=top-left" />
-   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=ActiveInAI/PanDB&type=date&legend=top-left" />
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=ActiveInAI/Arch-GPT-DB&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=ActiveInAI/Arch-GPT-DB&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=ActiveInAI/Arch-GPT-DB&type=date&legend=top-left" />
  </picture>
 </a>
 

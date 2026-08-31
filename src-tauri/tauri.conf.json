@@ -65,7 +65,7 @@
   "plugins": {
     "deep-link": {
       "desktop": {
-        "schemes": ["archgptdb", "dbx"]
+        "schemes": ["archgptdb"]
       }
     },
     "updater": {

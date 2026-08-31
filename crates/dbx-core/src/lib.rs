@@ -94,6 +94,38 @@ pub mod types;
 pub mod update;
 pub mod xlsx_export;
 
+/// Maps Arch-GPT DB configuration onto the PanDB-compatible runtime names used by
+/// the shared core. Existing PanDB values always win, so an explicit upstream
+/// integration remains possible without contaminating the Arch-GPT DB default.
+pub fn install_arch_gpt_db_environment_aliases() {
+    const ALIASES: &[&str] = &[
+        "DATA_DIR",
+        "WEB_URL",
+        "WEB_PASSWORD",
+        "PASSWORD",
+        "DISABLE_PASSWORD",
+        "PUBLIC_BASE_PATH",
+        "PORT",
+        "STATIC_DIR",
+        "MAX_UPLOAD_MB",
+        "AGENT_DIR",
+        "CONNECTION",
+        "MCP_ALLOW_WRITES",
+        "MCP_ALLOW_DANGEROUS_SQL",
+    ];
+
+    for suffix in ALIASES {
+        let arch_gpt = format!("ARCH_GPT_DB_{suffix}");
+        let pandb = format!("PANDB_{suffix}");
+        if std::env::var_os(&pandb).is_none() {
+            if let Some(value) = std::env::var_os(&arch_gpt) {
+                // Startup installs aliases before worker threads are created.
+                unsafe { std::env::set_var(pandb, value) };
+            }
+        }
+    }
+}
+
 /// Makes PanDB-prefixed runtime configuration available to legacy DBX readers without
 /// overwriting an explicitly supplied legacy value. Call this once at process startup.
 pub fn install_pandb_environment_aliases() {

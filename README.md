@@ -16,7 +16,7 @@
   <tr>
     <td width="50%">
       <h3>🪶 20 MB, zero runtime bloat</h3>
-      <p>No Java JRE. No Python venv. No bundled Chromium. PanDB ships as a single small binary — download, install, connect. DBeaver needs Java; TablePlus is macOS-only. PanDB runs everywhere with nothing extra.</p>
+      <p>No Java JRE. No Python venv. No bundled Chromium. Arch-GPT DB ships as a single small binary — download, install, connect. DBeaver needs Java; TablePlus is macOS-only. Arch-GPT DB runs everywhere with nothing extra.</p>
     </td>
     <td width="50%">
       <h3>🤖 AI that lives in your editor</h3>
@@ -26,7 +26,7 @@
   <tr>
     <td>
       <h3>🔌 MCP: your databases, AI-ready</h3>
-      <p>PanDB speaks the Model Context Protocol. Claude Code, Cursor, Windsurf, and other AI coding agents can query your databases through connections you already set up. One config, everywhere.</p>
+      <p>Arch-GPT DB speaks the Model Context Protocol. Claude Code, Cursor, Windsurf, and other AI coding agents can query your databases through connections you already set up. One config, everywhere.</p>
     </td>
     <td>
       <h3>🌐 Desktop + Docker + Web</h3>
@@ -39,7 +39,7 @@
 
 ### 70+ Databases, One Tool
 
-MySQL, PostgreSQL, SQLite, Cloudflare D1, Redis, MongoDB, DuckDB, ClickHouse, SQL Server, Oracle, Elasticsearch, Easysearch, Qdrant, Milvus, Weaviate, MariaDB, TiDB, OceanBase, openGauss, GaussDB, KWDB, KingBase, Vastbase, GoldenDB, Doris, SelectDB, StarRocks, Manticore Search, Redshift, DM, TDengine, XuguDB, CockroachDB, Access, HighGo, UXDB, and more. Agent/JDBC-oriented profiles extend PanDB to H2, Snowflake, Trino, PrestoSQL, Hive, DB2, Informix, Neo4j, Cassandra, BigQuery, Kylin, SunDB, JDBCX, and custom JDBC connections. New native and agent-driven drivers also cover Databricks, SAP HANA, Teradata, Vertica, Firebird, Exasol, YashanDB, GBase 8a/8s, Databend, RQLite, Turso, InfluxDB, QuestDB, IoTDB, etcd, ZooKeeper, Nacos, IRIS, and more. Message queue admin is also available for Pulsar, Kafka, and RocketMQ. All in a single ~20 MB app. No bundled Chromium.
+MySQL, PostgreSQL, SQLite, Cloudflare D1, Redis, MongoDB, DuckDB, ClickHouse, SQL Server, Oracle, Elasticsearch, Easysearch, Qdrant, Milvus, Weaviate, MariaDB, TiDB, OceanBase, openGauss, GaussDB, KWDB, KingBase, Vastbase, GoldenDB, Doris, SelectDB, StarRocks, Manticore Search, Redshift, DM, TDengine, XuguDB, CockroachDB, Access, HighGo, UXDB, and more. Agent/JDBC-oriented profiles extend Arch-GPT DB to H2, Snowflake, Trino, PrestoSQL, Hive, DB2, Informix, Neo4j, Cassandra, BigQuery, Kylin, SunDB, JDBCX, and custom JDBC connections. New native and agent-driven drivers also cover Databricks, SAP HANA, Teradata, Vertica, Firebird, Exasol, YashanDB, GBase 8a/8s, Databend, RQLite, Turso, InfluxDB, QuestDB, IoTDB, etcd, ZooKeeper, Nacos, IRIS, and more. Message queue admin is also available for Pulsar, Kafka, and RocketMQ. All in a single ~20 MB app. No bundled Chromium.
 
 ### Query Editor
 
@@ -47,7 +47,7 @@ CodeMirror 6 with SQL syntax highlighting, metadata-aware autocomplete, `Cmd+Ent
 
 ### AI SQL Assistant
 
-Describe what you want in plain language — get SQL back. PanDB can explain queries, optimize SQL, fix errors, and run AI-generated SQL through built-in safety checks. Works with Claude, OpenAI, local models, or any OpenAI-compatible endpoint.
+Describe what you want in plain language — get SQL back. Arch-GPT DB can explain queries, optimize SQL, fix errors, and run AI-generated SQL through built-in safety checks. Works with Claude, OpenAI, local models, or any OpenAI-compatible endpoint.
 
 ### Data Grid
 
@@ -89,7 +89,7 @@ Dark mode with native title bar sync · 9 editor themes · English, 简体中文
 
 ## AI Agent Integration (MCP)
 
-PanDB provides a separate [Rust-powered MCP server](packages/mcp-server/) that lets AI coding agents query databases using connections configured in PanDB. The MCP server is distributed independently from the desktop application, so installing PanDB does not automatically install the MCP executable.
+Arch-GPT DB provides a separate [Rust-powered MCP server](packages/mcp-server/) that lets AI coding agents query databases using connections configured in Arch-GPT DB. The MCP server is distributed independently from the desktop application, so installing Arch-GPT DB does not automatically install the MCP executable.
 
 ```bash
 npx @dbx-app/mcp-server
@@ -105,13 +105,13 @@ Add to your `.mcp.json`:
 }
 ```
 
-Manage the connection allowlist and the **Read only**, **Data read/write**, and **Full access** modes in **PanDB Settings → MCP**. The machine-readable values remain `read_only`, `safe_write`, and `high_risk_write`; client configs do not need permission or connection-scope environment variables.
+Manage the connection allowlist and the **Read only**, **Data read/write**, and **Full access** modes in **Arch-GPT DB Settings → MCP**. The machine-readable values remain `read_only`, `safe_write`, and `high_risk_write`; client configs do not need permission or connection-scope environment variables.
 
 For upgrade compatibility, an existing `DBX_MCP_ALLOW_WRITES=0` (or `false`) remains a read-only restriction only until a central MCP policy is saved for the first time; it can never enable writes or override a saved policy.
 
-Windows portable builds need `PANDB_DATA_DIR` in the MCP config, pointing to the `data` directory next to `PanDB.exe` (the folder that contains `dbx.db`).
+Windows portable builds need `ARCH_GPT_DB_DATA_DIR` in the MCP config, pointing to the `data` directory next to `Arch-GPT DB.exe` (the folder that contains `dbx.db`).
 
-For PanDB Web or Docker deployments, point the MCP server at the Web backend API. If the Web login page requires a password, set `PANDB_WEB_PASSWORD` to the same password used there:
+For Arch-GPT DB Web or Docker deployments, point the MCP server at the Web backend API. If the Web login page requires a password, set `ARCH_GPT_DB_WEB_PASSWORD` to the same password used there:
 
 ```json
 {
@@ -119,19 +119,19 @@ For PanDB Web or Docker deployments, point the MCP server at the Web backend API
     "pandb": {
       "command": "pandb-mcp-server",
       "env": {
-        "PANDB_WEB_URL": "http://localhost:4224",
-        "PANDB_WEB_PASSWORD": "your-web-login-password"
+        "ARCH_GPT_DB_WEB_URL": "http://localhost:4224",
+        "ARCH_GPT_DB_WEB_PASSWORD": "your-web-login-password"
       }
     }
   }
 }
 ```
 
-Works with Claude Code, Cursor, Windsurf, and any MCP-compatible agent. Supports listing connections, browsing tables, executing SQL, and opening tables directly in PanDB's UI.
+Works with Claude Code, Cursor, Windsurf, and any MCP-compatible agent. Supports listing connections, browsing tables, executing SQL, and opening tables directly in Arch-GPT DB's UI.
 
 ## Installation
 
-PanDB is currently distributed from source while its first public release is prepared. Clone this repository and follow the development instructions below. Existing installations remain compatible during the transition, but legacy download channels are not PanDB release channels.
+Arch-GPT DB is currently distributed from source while its first public release is prepared. Clone this repository and follow the development instructions below. Existing installations remain compatible during the transition, but legacy download channels are not Arch-GPT DB release channels.
 
 ## Self-Hosted (Docker)
 
@@ -145,10 +145,10 @@ Open `http://localhost:4224` after the containers are ready. To publish under a 
 
 ```yaml
 environment:
-  - PANDB_PUBLIC_BASE_PATH=/pandb
+  - ARCH_GPT_DB_PUBLIC_BASE_PATH=/pandb
 ```
 
-When building the frontend with an absolute asset base, set `VITE_PANDB_BASE_PATH=/pandb/` before `pnpm build`. The legacy `DBX_*` forms remain supported for existing deployments.
+When building the frontend with an absolute asset base, set `VITE_ARCH_GPT_DB_BASE_PATH=/pandb/` before `pnpm build`. The legacy `DBX_*` forms remain supported for existing deployments.
 
 ## Getting Started
 
@@ -186,7 +186,7 @@ make
 
 `make` installs root dependencies when needed and starts the local Tauri desktop development environment.
 
-Development builds can run alongside an installed PanDB instance and share its local data, including connections and history. Avoid changing the same connection or global setting in both windows at once.
+Development builds can run alongside an installed Arch-GPT DB instance and share its local data, including connections and history. Avoid changing the same connection or global setting in both windows at once.
 
 > [!TIP]
 > DuckDB compilation takes a while. If you're not working on DuckDB features,
@@ -217,7 +217,7 @@ Documentation site:
 make docs
 ```
 
-The official PanDB documentation site lives in `docs/`. If you want to improve the website content or documentation pages, edit the files under `docs/` and run `make docs` to preview the site locally.
+The official Arch-GPT DB documentation site lives in `docs/`. If you want to improve the website content or documentation pages, edit the files under `docs/` and run `make docs` to preview the site locally.
 
 For clean, reproducible local database instances, use the versioned Docker Compose recipes under [`deploy/database/`](deploy/database/README.md):
 
@@ -255,103 +255,32 @@ The installer will be in `src-tauri/target/release/bundle/`.
 
 ## Documentation
 
-- [Documentation source](https://github.com/ActiveInAI/PanDB/tree/main/docs) — feature guides and tutorials
-- [Database Test Lab](https://github.com/ActiveInAI/PanDB/tree/main/deploy/database) — local database recipes for development and verification
+- [Documentation source](https://github.com/ActiveInAI/Arch-GPT-DB/tree/main/docs) — feature guides and tutorials
+- [Database Test Lab](https://github.com/ActiveInAI/Arch-GPT-DB/tree/main/deploy/database) — local database recipes for development and verification
 - [Contributing](CONTRIBUTING.md) — how to pick up issues and open PRs
 - [Web API reference](docs/content/docs/web-api.mdx) — HTTP API for Docker/Web deployments
 - [Examples](examples/) — CLI, MCP, Docker, and API samples
 
-## Community
-
-<a href="https://discord.gg/W7NyVDRt6a" target="_blank"><img src="https://img.shields.io/badge/Discord-Join-5865F2?logo=discord&logoColor=white" alt="Discord" /></a>
-<a href="https://qm.qq.com/q/1087880322" target="_blank"><img src="https://img.shields.io/badge/QQ%20群-1087880322-EB1923?logo=tencentqq&logoColor=white" alt="QQ Group" /></a>
-<a href="https://docs.qq.com/doc/DVVhMY0h1ekJqc0tz" target="_blank"><img src="https://img.shields.io/badge/微信群-Join-07C160?logo=wechat&logoColor=white" alt="WeChat Group" /></a>
-[![LINUX DO](https://img.shields.io/badge/LINUX%20DO-Community-blue)](https://linux.do)
-
-## Support PanDB
-
-PanDB is free and open source, but ongoing maintenance, database compatibility testing, infrastructure, and release work require sustained time and resources.
-
-### Sponsors & Partners
-
-<table>
-  <tr>
-    <td align="center" width="180">
-      <a href="https://www.rainyun.com/MTE5Mjc4Ng==_" target="_blank">
-        <img src="https://www.rainyun.com/img/logo.d193755d.png" alt="RainYun" height="48" />
-      </a>
-    </td>
-    <td>
-      RainYun is a cloud service provider offering cloud servers, physical servers, game hosting, and developer-friendly infrastructure services.
-    </td>
-    <td align="center" width="140">
-      <a href="https://www.rainyun.com/MTE5Mjc4Ng==_" target="_blank">Visit RainYun</a>
-    </td>
-  </tr>
-  <tr>
-    <td align="center" width="180">
-      <a href="https://www.qiniu.com/" target="_blank">
-        <img src="https://www-static.qbox.me/_next/static/media/logo.0fc18feaa621d2068a7180631f742256.jpg" alt="Qiniu Cloud" height="64" />
-      </a>
-    </td>
-    <td>
-      Qiniu Cloud provides PanDB with object storage, CDN, and other cloud infrastructure resources.
-    </td>
-    <td align="center" width="140">
-      <a href="https://www.qiniu.com/" target="_blank">Visit Qiniu Cloud</a>
-    </td>
-  </tr>
-  <tr>
-    <td align="center" width="180">
-      <a href="https://easysearch.cn" target="_blank">
-        <img src="docs/public/sponsors/easysearch.png" alt="Easysearch" width="150" />
-      </a>
-    </td>
-    <td>
-      Easysearch is an enterprise-grade distributed search engine compatible with Elasticsearch APIs, combining full-text, vector, geospatial search, real-time analytics, and AI capabilities in one platform.
-    </td>
-    <td align="center" width="140">
-      <a href="https://easysearch.cn" target="_blank">Visit Easysearch</a>
-    </td>
-  </tr>
-  <tr>
-    <td align="center" width="180">
-      <a href="https://www.atlascloud.ai/?ref=6YYXWA" target="_blank">
-        <img src="https://www.atlascloud.ai/logo.svg" alt="Atlas Cloud" width="150" />
-      </a>
-    </td>
-    <td>
-      Atlas Cloud gives developers one unified API for 400+ AI models across chat, image, video, and audio.
-    </td>
-    <td align="center" width="140">
-      <a href="https://www.atlascloud.ai/?ref=6YYXWA" target="_blank">Visit Atlas Cloud</a>
-    </td>
-  </tr>
-</table>
-
-- [Support PanDB](https://my.feishu.cn/wiki/WMTkwdATDiiu4rk14JMcoyhTnoh) — voluntary donations via WeChat or Alipay
-- [Sponsors & Partners](https://my.feishu.cn/wiki/CgOWwwTzzify79k9Oq8cXpUNn6e) — sponsorship, infrastructure, tools, and community collaboration
-
 ## FAQ
 
 <details>
-<summary><strong>Is PanDB free?</strong></summary>
-Yes. PanDB is open source under Apache-2.0. All features are free.
+<summary><strong>Is Arch-GPT DB free?</strong></summary>
+Yes. Arch-GPT DB is open source under Apache-2.0. All features are free.
 </details>
 
 <details>
-<summary><strong>Does PanDB phone home?</strong></summary>
-No. PanDB does not collect telemetry. The auto-update feature checks GitHub Releases for new versions — you can disable it in settings.
+<summary><strong>Does Arch-GPT DB phone home?</strong></summary>
+No. Arch-GPT DB does not collect telemetry. The auto-update feature checks GitHub Releases for new versions — you can disable it in settings.
 </details>
 
 <details>
-<summary><strong>Can I use PanDB without an internet connection?</strong></summary>
-Yes. The desktop app works fully offline. For air-gapped driver installs, obtain the needed JDBC artifact on an internet-connected machine, transfer it to the offline machine, then import it in PanDB from Settings > Driver Manager. AI features need network access to the model endpoint (or a local model via Ollama).
+<summary><strong>Can I use Arch-GPT DB without an internet connection?</strong></summary>
+Yes. The desktop app works fully offline. For air-gapped driver installs, obtain the needed JDBC artifact on an internet-connected machine, transfer it to the offline machine, then import it in Arch-GPT DB from Settings > Driver Manager. AI features need network access to the model endpoint (or a local model via Ollama).
 </details>
 
 <details>
-<summary><strong>How is PanDB different from DBeaver / TablePlus / Beekeeper Studio?</strong></summary>
-PanDB is 20 MB with no runtime dependencies for its native database features (no system Java or Python required). AI is built into the application, while MCP is provided as a separately installed Rust companion package or native binary. It supports 70+ databases across desktop, Docker, and web from a shared Rust core.
+<summary><strong>How is Arch-GPT DB different from DBeaver / TablePlus / Beekeeper Studio?</strong></summary>
+Arch-GPT DB is 20 MB with no runtime dependencies for its native database features (no system Java or Python required). AI is built into the application, while MCP is provided as a separately installed Rust companion package or native binary. It supports 70+ databases across desktop, Docker, and web from a shared Rust core.
 </details>
 
 <details>
@@ -361,22 +290,22 @@ MySQL, PostgreSQL, SQLite, Cloudflare D1, Redis, MongoDB, DuckDB, ClickHouse, SQ
 
 <details>
 <summary><strong>How do I report a bug or request a feature?</strong></summary>
-Open an issue on <a href="https://github.com/ActiveInAI/PanDB/issues">GitHub Issues</a>.
+Open an issue on <a href="https://github.com/ActiveInAI/Arch-GPT-DB/issues">GitHub Issues</a>.
 </details>
 
 ## Contributors
 
-<a href="https://github.com/ActiveInAI/PanDB/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=ActiveInAI/PanDB" />
+<a href="https://github.com/ActiveInAI/Arch-GPT-DB/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=ActiveInAI/Arch-GPT-DB" />
 </a>
 
 ## Star History
 
 <a href="https://www.star-history.com/?repos=ActiveInAI%2FPanDB&type=date&legend=top-left">
  <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=ActiveInAI/PanDB&type=date&theme=dark&legend=top-left" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=ActiveInAI/PanDB&type=date&legend=top-left" />
-   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=ActiveInAI/PanDB&type=date&legend=top-left" />
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=ActiveInAI/Arch-GPT-DB&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=ActiveInAI/Arch-GPT-DB&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=ActiveInAI/Arch-GPT-DB&type=date&legend=top-left" />
  </picture>
 </a>
 

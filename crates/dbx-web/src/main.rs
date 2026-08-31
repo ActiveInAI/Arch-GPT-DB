@@ -192,6 +192,7 @@ fn add_mq_routes(router: Router<Arc<WebState>>) -> Router<Arc<WebState>> {
 
 #[tokio::main]
 async fn main() {
+    dbx_core::install_arch_gpt_db_environment_aliases();
     dbx_core::install_pandb_environment_aliases();
     tracing_subscriber::fmt()
         .with_env_filter(

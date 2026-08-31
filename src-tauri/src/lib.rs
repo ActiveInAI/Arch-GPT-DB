@@ -1276,6 +1276,7 @@ mod tests {
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
+    dbx_core::install_arch_gpt_db_environment_aliases();
     dbx_core::install_pandb_environment_aliases();
     startup_recovery::initialize();
     rustls::crypto::aws_lc_rs::default_provider().install_default().expect("Failed to install rustls crypto provider");

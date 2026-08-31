@@ -152,6 +152,7 @@ struct Diagnostics {
 
 #[tokio::main]
 async fn main() -> ExitCode {
+    dbx_core::install_arch_gpt_db_environment_aliases();
     dbx_core::install_pandb_environment_aliases();
     match run(env::args().skip(1).collect()).await {
         Ok(output) => {
