@@ -109,8 +109,8 @@ pub mod update;
 pub mod write_unlock;
 pub mod xlsx_export;
 
-/// Maps Arch-GPT DB configuration onto the Arch-GPT DB-compatible runtime names used by
-/// the shared core. Existing Arch-GPT DB values always win, so an explicit upstream
+/// Maps Arch-GPT DB configuration onto the PanDB-compatible runtime names used by
+/// the shared core. Existing PanDB values always win, so an explicit upstream
 /// integration remains possible without contaminating the Arch-GPT DB default.
 pub fn install_arch_gpt_db_environment_aliases() {
     const ALIASES: &[&str] = &[
@@ -141,7 +141,12 @@ pub fn install_arch_gpt_db_environment_aliases() {
     }
 }
 
-/// Makes Arch-GPT DB-prefixed runtime configuration available to legacy DBX readers without
+#[cfg(feature = "dynamodb")]
+compile_error!(
+    "DynamoDB support has been retired from Arch-GPT DB; use a maintained external driver or service integration."
+);
+
+/// Makes PanDB-prefixed runtime configuration available to legacy DBX readers without
 /// overwriting an explicitly supplied legacy value. Call this once at process startup.
 pub fn install_pandb_environment_aliases() {
     const ALIASES: &[&str] = &[
