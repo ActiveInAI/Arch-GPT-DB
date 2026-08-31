@@ -683,14 +683,14 @@ fn locale_family(locale: &str) -> LocaleFamily {
 
 fn tray_menu_labels_for_locale(locale: &str) -> (&'static str, &'static str) {
     match locale_family(locale) {
-        LocaleFamily::SimplifiedChinese => ("显示 PanDB", "退出 PanDB"),
-        LocaleFamily::TraditionalChinese => ("顯示 PanDB", "退出 PanDB"),
-        LocaleFamily::Japanese => ("PanDBを表示", "PanDBを終了"),
-        LocaleFamily::Korean => ("PanDB 표시", "PanDB 종료"),
-        LocaleFamily::Spanish => ("Mostrar PanDB", "Salir de PanDB"),
-        LocaleFamily::Italian => ("Mostra PanDB", "Esci da PanDB"),
-        LocaleFamily::Portuguese => ("Mostrar PanDB", "Sair do PanDB"),
-        LocaleFamily::English => ("Show PanDB", "Quit PanDB"),
+        LocaleFamily::SimplifiedChinese => ("显示 Arch-GPT DB", "退出 Arch-GPT DB"),
+        LocaleFamily::TraditionalChinese => ("顯示 Arch-GPT DB", "退出 Arch-GPT DB"),
+        LocaleFamily::Japanese => ("Arch-GPT DBを表示", "Arch-GPT DBを終了"),
+        LocaleFamily::Korean => ("Arch-GPT DB 표시", "Arch-GPT DB 종료"),
+        LocaleFamily::Spanish => ("Mostrar Arch-GPT DB", "Salir de Arch-GPT DB"),
+        LocaleFamily::Italian => ("Mostra Arch-GPT DB", "Esci da Arch-GPT DB"),
+        LocaleFamily::Portuguese => ("Mostrar Arch-GPT DB", "Sair do Arch-GPT DB"),
+        LocaleFamily::English => ("Show Arch-GPT DB", "Quit Arch-GPT DB"),
     }
 }
 
@@ -753,8 +753,10 @@ fn setup_desktop_tray<R: tauri::Runtime, M: Manager<R>>(
     _icon_theme: DesktopIconTheme,
 ) -> tauri::Result<()> {
     let menu = build_tray_menu(manager)?;
-    let mut tray =
-        TrayIconBuilder::<R>::with_id(DESKTOP_TRAY_ID).tooltip("PanDB").menu(&menu).show_menu_on_left_click(false);
+    let mut tray = TrayIconBuilder::<R>::with_id(DESKTOP_TRAY_ID)
+        .tooltip("Arch-GPT DB")
+        .menu(&menu)
+        .show_menu_on_left_click(false);
     #[cfg(target_os = "macos")]
     {
         tray = tray.icon(MACOS_TRAY_ICON).icon_as_template(true);
@@ -917,32 +919,32 @@ mod tests {
 
     #[test]
     fn tray_menu_labels_follow_locale() {
-        assert_eq!(tray_menu_labels_for_locale("zh-CN"), ("显示 PanDB", "退出 PanDB"));
-        assert_eq!(tray_menu_labels_for_locale("zh_CN"), ("显示 PanDB", "退出 PanDB"));
-        assert_eq!(tray_menu_labels_for_locale("zh-Hans-CN"), ("显示 PanDB", "退出 PanDB"));
-        assert_eq!(tray_menu_labels_for_locale("zh"), ("显示 PanDB", "退出 PanDB"));
-        assert_eq!(tray_menu_labels_for_locale("zh-TW"), ("顯示 PanDB", "退出 PanDB"));
-        assert_eq!(tray_menu_labels_for_locale("zh-Hant-HK"), ("顯示 PanDB", "退出 PanDB"));
-        assert_eq!(tray_menu_labels_for_locale("zh-MO"), ("顯示 PanDB", "退出 PanDB"));
-        assert_eq!(tray_menu_labels_for_locale("ja-JP"), ("PanDBを表示", "PanDBを終了"));
-        assert_eq!(tray_menu_labels_for_locale("ko-KR"), ("PanDB 표시", "PanDB 종료"));
-        assert_eq!(tray_menu_labels_for_locale("es-ES"), ("Mostrar PanDB", "Salir de PanDB"));
-        assert_eq!(tray_menu_labels_for_locale("it-IT"), ("Mostra PanDB", "Esci da PanDB"));
-        assert_eq!(tray_menu_labels_for_locale("pt-BR"), ("Mostrar PanDB", "Sair do PanDB"));
-        assert_eq!(tray_menu_labels_for_locale("en-US"), ("Show PanDB", "Quit PanDB"));
+        assert_eq!(tray_menu_labels_for_locale("zh-CN"), ("显示 Arch-GPT DB", "退出 Arch-GPT DB"));
+        assert_eq!(tray_menu_labels_for_locale("zh_CN"), ("显示 Arch-GPT DB", "退出 Arch-GPT DB"));
+        assert_eq!(tray_menu_labels_for_locale("zh-Hans-CN"), ("显示 Arch-GPT DB", "退出 Arch-GPT DB"));
+        assert_eq!(tray_menu_labels_for_locale("zh"), ("显示 Arch-GPT DB", "退出 Arch-GPT DB"));
+        assert_eq!(tray_menu_labels_for_locale("zh-TW"), ("顯示 Arch-GPT DB", "退出 Arch-GPT DB"));
+        assert_eq!(tray_menu_labels_for_locale("zh-Hant-HK"), ("顯示 Arch-GPT DB", "退出 Arch-GPT DB"));
+        assert_eq!(tray_menu_labels_for_locale("zh-MO"), ("顯示 Arch-GPT DB", "退出 Arch-GPT DB"));
+        assert_eq!(tray_menu_labels_for_locale("ja-JP"), ("Arch-GPT DBを表示", "Arch-GPT DBを終了"));
+        assert_eq!(tray_menu_labels_for_locale("ko-KR"), ("Arch-GPT DB 표시", "Arch-GPT DB 종료"));
+        assert_eq!(tray_menu_labels_for_locale("es-ES"), ("Mostrar Arch-GPT DB", "Salir de Arch-GPT DB"));
+        assert_eq!(tray_menu_labels_for_locale("it-IT"), ("Mostra Arch-GPT DB", "Esci da Arch-GPT DB"));
+        assert_eq!(tray_menu_labels_for_locale("pt-BR"), ("Mostrar Arch-GPT DB", "Sair do Arch-GPT DB"));
+        assert_eq!(tray_menu_labels_for_locale("en-US"), ("Show Arch-GPT DB", "Quit Arch-GPT DB"));
         // Unknown and empty locales fall back to English; "ita" must not match "it".
-        assert_eq!(tray_menu_labels_for_locale("ita"), ("Show PanDB", "Quit PanDB"));
-        assert_eq!(tray_menu_labels_for_locale(""), ("Show PanDB", "Quit PanDB"));
+        assert_eq!(tray_menu_labels_for_locale("ita"), ("Show Arch-GPT DB", "Quit Arch-GPT DB"));
+        assert_eq!(tray_menu_labels_for_locale(""), ("Show Arch-GPT DB", "Quit Arch-GPT DB"));
     }
 
     #[test]
     fn app_menu_labels_follow_locale() {
-        assert_eq!(app_menu_quit_label("zh-CN", "PanDB"), "退出 PanDB");
-        assert_eq!(app_menu_quit_label("zh-TW", "PanDB"), "退出 PanDB");
-        assert_eq!(app_menu_quit_label("ja-JP", "PanDB"), "PanDBを終了");
-        assert_eq!(app_menu_quit_label("ko-KR", "PanDB"), "PanDB 종료");
-        assert_eq!(app_menu_quit_label("en-US", "PanDB"), "Quit PanDB");
-        assert_eq!(app_menu_quit_label("", "PanDB"), "Quit PanDB");
+        assert_eq!(app_menu_quit_label("zh-CN", "Arch-GPT DB"), "退出 Arch-GPT DB");
+        assert_eq!(app_menu_quit_label("zh-TW", "Arch-GPT DB"), "退出 Arch-GPT DB");
+        assert_eq!(app_menu_quit_label("ja-JP", "Arch-GPT DB"), "Arch-GPT DBを終了");
+        assert_eq!(app_menu_quit_label("ko-KR", "Arch-GPT DB"), "Arch-GPT DB 종료");
+        assert_eq!(app_menu_quit_label("en-US", "Arch-GPT DB"), "Quit Arch-GPT DB");
+        assert_eq!(app_menu_quit_label("", "Arch-GPT DB"), "Quit Arch-GPT DB");
         assert_eq!(app_menu_copy_support_info_label("zh-CN"), "复制支持信息");
         assert_eq!(app_menu_copy_support_info_label("zh-TW"), "複製支援資訊");
         assert_eq!(app_menu_copy_support_info_label("ko-KR"), "지원 정보 복사");
@@ -1178,7 +1180,7 @@ mod tests {
     fn prefers_x11_for_appimage_wayland_when_backend_is_not_user_configured() {
         assert_eq!(
             linux_appimage_wayland_backend_override(
-                Some(OsStr::new("/tmp/PanDB.AppImage")),
+                Some(OsStr::new("/tmp/Arch-GPT DB.AppImage")),
                 Some(OsStr::new("wayland-0")),
                 None
             ),
@@ -1186,13 +1188,16 @@ mod tests {
         );
         assert_eq!(
             linux_appimage_wayland_backend_override(
-                Some(OsStr::new("/tmp/PanDB.AppImage")),
+                Some(OsStr::new("/tmp/Arch-GPT DB.AppImage")),
                 Some(OsStr::new("wayland-0")),
                 Some(OsStr::new("wayland"))
             ),
             None
         );
-        assert_eq!(linux_appimage_wayland_backend_override(Some(OsStr::new("/tmp/PanDB.AppImage")), None, None), None);
+        assert_eq!(
+            linux_appimage_wayland_backend_override(Some(OsStr::new("/tmp/Arch-GPT DB.AppImage")), None, None),
+            None
+        );
         assert_eq!(linux_appimage_wayland_backend_override(None, Some(OsStr::new("wayland-0")), None), None);
     }
 
@@ -1200,7 +1205,7 @@ mod tests {
     fn prefers_system_gtk_immodules_cache_for_appimage_input_methods() {
         assert_eq!(
             linux_appimage_system_gtk_immodules_cache(
-                Some(OsStr::new("/tmp/PanDB.AppImage")),
+                Some(OsStr::new("/tmp/Arch-GPT DB.AppImage")),
                 Some(OsStr::new("/tmp/.mount_DBX123")),
                 Some(OsStr::new("fcitx5")),
                 Some(OsStr::new("/tmp/.mount_DBX123/usr/lib/x86_64-linux-gnu/gtk-3.0/3.0.0/immodules.cache")),
@@ -1210,7 +1215,7 @@ mod tests {
         );
         assert_eq!(
             linux_appimage_system_gtk_immodules_cache(
-                Some(OsStr::new("/tmp/PanDB.AppImage")),
+                Some(OsStr::new("/tmp/Arch-GPT DB.AppImage")),
                 Some(OsStr::new("/tmp/.mount_DBX123")),
                 Some(OsStr::new("ibus")),
                 None,
@@ -1224,7 +1229,7 @@ mod tests {
     fn preserves_external_gtk_immodules_cache_overrides() {
         assert_eq!(
             linux_appimage_system_gtk_immodules_cache(
-                Some(OsStr::new("/tmp/PanDB.AppImage")),
+                Some(OsStr::new("/tmp/Arch-GPT DB.AppImage")),
                 Some(OsStr::new("/tmp/.mount_DBX123")),
                 Some(OsStr::new("fcitx5")),
                 Some(OsStr::new("/opt/custom/immodules.cache")),
@@ -1248,7 +1253,7 @@ mod tests {
         );
         assert_eq!(
             linux_appimage_system_gtk_immodules_cache(
-                Some(OsStr::new("/tmp/PanDB.AppImage")),
+                Some(OsStr::new("/tmp/Arch-GPT DB.AppImage")),
                 Some(OsStr::new("/tmp/.mount_DBX123")),
                 None,
                 Some(OsStr::new("/tmp/.mount_DBX123/usr/lib/x86_64-linux-gnu/gtk-3.0/3.0.0/immodules.cache")),
@@ -1258,7 +1263,7 @@ mod tests {
         );
         assert_eq!(
             linux_appimage_system_gtk_immodules_cache(
-                Some(OsStr::new("/tmp/PanDB.AppImage")),
+                Some(OsStr::new("/tmp/Arch-GPT DB.AppImage")),
                 Some(OsStr::new("/tmp/.mount_DBX123")),
                 Some(OsStr::new("fcitx5")),
                 Some(OsStr::new("/tmp/.mount_DBX123/usr/lib/x86_64-linux-gnu/gtk-3.0/3.0.0/immodules.cache")),

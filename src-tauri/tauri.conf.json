@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "PanDB",
+  "productName": "Arch-GPT DB",
   "version": "0.5.77",
-  "identifier": "com.activeinai.pandb",
+  "identifier": "com.activeinai.archgptdb",
   "build": {
     "frontendDist": "../dist",
     "devUrl": "http://localhost:1420",
@@ -12,7 +12,7 @@
   "app": {
     "windows": [
       {
-        "title": "PanDB",
+        "title": "Arch-GPT DB",
         "width": 1280,
         "height": 800,
         "minWidth": 900,
@@ -65,12 +65,12 @@
   "plugins": {
     "deep-link": {
       "desktop": {
-        "schemes": ["dbx"]
+        "schemes": ["archgptdb", "dbx"]
       }
     },
     "updater": {
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDJBNTlGMjA1NzcwMTBFODcKUldTSERnRjNCZkpaS3U3S2JHVlZhTzFuNURZNnh4UEVuMkJhZlF3eDhZZTFEa1I2S3drVFE2anUK",
-      "endpoints": ["https://github.com/ActiveInAI/PanDB/releases/latest/download/latest.json"]
+      "endpoints": ["https://github.com/ActiveInAI/Arch-GPT-DB/releases/latest/download/latest.json"]
     }
   }
 }

@@ -8,5 +8,5 @@ const logoSrc = computed(() => (isBlackLogo.value ? "/logo-black.png" : "/logo.p
 </script>
 
 <template>
-  <img :src="logoSrc" alt="PanDB" :class="isBlackLogo ? 'dark:invert' : ''" />
+  <img :src="logoSrc" alt="Arch-GPT DB" :class="isBlackLogo ? 'dark:invert' : ''" />
 </template>

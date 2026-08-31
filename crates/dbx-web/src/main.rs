@@ -31,7 +31,7 @@ const DATA_GRID_EXTRACTOR_BODY_LIMIT_BYTES: usize = 96 * 1024 * 1024;
 
 #[derive(OpenApi)]
 #[openapi(
-    info(title = "PanDB Data Grid Extractor API", description = "HTTP contract for data-grid clipboard extraction."),
+    info(title = "Arch-GPT DB Data Grid Extractor API", description = "HTTP contract for data-grid clipboard extraction."),
     paths(routes::query::extract_data_grid_selection),
     tags((name = "data-grid", description = "Data grid extraction and clipboard formats"))
 )]
@@ -202,7 +202,7 @@ async fn main() {
 
     rustls::crypto::aws_lc_rs::default_provider().install_default().expect("Failed to install rustls crypto provider");
 
-    // PanDB variables take precedence; DBX names keep existing installations and scripts working.
+    // Arch-GPT DB variables take precedence; DBX names keep existing installations and scripts working.
     let data_dir = config_value("PANDB_DATA_DIR", "DBX_DATA_DIR").map(std::path::PathBuf::from).unwrap_or_else(|| {
         let home = std::env::var("HOME").unwrap_or_else(|_| ".".to_string());
         let home = std::path::PathBuf::from(home);
@@ -837,9 +837,9 @@ async fn main() {
     let port: u16 = config_value("PANDB_PORT", "DBX_PORT").and_then(|p| p.parse().ok()).unwrap_or(4224);
     let addr = SocketAddr::from(([0, 0, 0, 0], port));
 
-    tracing::info!("PanDB Web server starting on http://{}", addr);
+    tracing::info!("Arch-GPT DB Web server starting on http://{}", addr);
     if public_base_path != "/" {
-        tracing::info!("Serving PanDB Web under context path {}", public_base_path);
+        tracing::info!("Serving Arch-GPT DB Web under context path {}", public_base_path);
     }
     if password_disabled {
         tracing::info!("Password protection is disabled");

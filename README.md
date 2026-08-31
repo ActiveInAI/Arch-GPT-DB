@@ -1,16 +1,16 @@
 <div align="center">
 
-<img src="brand/pandb-logo.svg" alt="PanDB logo" width="144" />
+<img src="brand/arch-gpt-db-logo.svg" alt="Arch-GPT DB logo" width="144" />
 
-# PanDB
+# Arch-GPT DB
 
-**Lightweight, AI-native database management for 70+ databases. Desktop, Docker, CLI, and MCP Server.**
+**An Arch-GPT customized database intelligence workbench, built on PanDB for 70+ databases, AI-assisted SQL, project context, and MCP workflows.**
 
-[GitHub](https://github.com/ActiveInAI/PanDB) · [简体中文](README.zh-CN.md)
+[PanDB upstream](https://github.com/ActiveInAI/PanDB) · [简体中文](README.zh-CN.md)
 
 </div>
 
-## Why PanDB?
+## Why Arch-GPT DB?
 
 <table>
   <tr>

@@ -68,14 +68,20 @@ pub fn alternative_data_dir(resolution: &DataDirResolution) -> Option<PathBuf> {
     }
 }
 
-/// Returns the pre-PanDB installed-app directory only for a normal installed launch.
+/// Returns the nearest compatible PanDB/DBX data directory only for a normal installed launch.
 /// Custom and portable directories are already explicit user choices and must not import from it.
 pub fn legacy_app_data_dir(resolution: &DataDirResolution) -> Option<PathBuf> {
     if !matches!(resolution.mode, DataDirMode::Default) {
         return None;
     }
-    let legacy_dir = resolution.default_data_dir.parent()?.join("com.dbx.app");
-    (legacy_dir != resolution.default_data_dir).then_some(legacy_dir)
+    let parent = resolution.default_data_dir.parent()?;
+    let pandb_dir = parent.join("com.activeinai.pandb");
+    let dbx_dir = parent.join("com.dbx.app");
+    if pandb_dir.join("dbx.db").is_file() {
+        (pandb_dir != resolution.default_data_dir).then_some(pandb_dir)
+    } else {
+        (dbx_dir != resolution.default_data_dir).then_some(dbx_dir)
+    }
 }
 
 pub fn is_portable_mode() -> bool {

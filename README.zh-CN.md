@@ -1,16 +1,16 @@
 <div align="center">
 
-<img src="brand/pandb-logo.svg" alt="PanDB 标志" width="144" />
+<img src="brand/arch-gpt-db-logo.svg" alt="Arch-GPT DB 标志" width="144" />
 
-# PanDB
+# Arch-GPT DB
 
-**轻量、AI 原生的数据库管理平台，支持 70+ 种数据库，提供桌面端、Docker、CLI 与 MCP Server。**
+**基于 PanDB 定制的 Arch-GPT 数据库智能工作台，支持 70+ 种数据库、AI SQL、项目上下文与 MCP 工作流。**
 
-[GitHub](https://github.com/ActiveInAI/PanDB) · [English](README.md)
+[PanDB 上游](https://github.com/ActiveInAI/PanDB) · [English](README.md)
 
 </div>
 
-## 为什么选择 PanDB？
+## 为什么选择 Arch-GPT DB？
 
 <table>
   <tr>
