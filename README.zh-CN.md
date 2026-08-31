@@ -300,7 +300,7 @@ MySQL、PostgreSQL、SQLite、Cloudflare D1、Redis、MongoDB、DuckDB、ClickHo
 
 ## Star History
 
-<a href="https://www.star-history.com/?repos=ActiveInAI%2FPanDB&type=date&legend=top-left">
+<a href="https://www.star-history.com/?repos=ActiveInAI%2FArch-GPT-DB&type=date&legend=top-left">
  <picture>
    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=ActiveInAI/Arch-GPT-DB&type=date&theme=dark&legend=top-left" />
    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=ActiveInAI/Arch-GPT-DB&type=date&legend=top-left" />
