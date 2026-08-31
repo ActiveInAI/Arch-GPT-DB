@@ -1,7 +1,7 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 
-const repository = process.env.DBX_GITHUB_REPOSITORY || "ActiveInAI/PanDB";
+const repository = process.env.DBX_GITHUB_REPOSITORY || "ActiveInAI/Arch-GPT DB";
 const token = process.env.GITHUB_TOKEN;
 const apiBase = "https://api.github.com";
 const outputPath = resolve(import.meta.dirname, "../data/contributors.json");

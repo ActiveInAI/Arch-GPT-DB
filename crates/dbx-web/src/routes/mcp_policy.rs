@@ -234,7 +234,7 @@ async fn load_policy(state: &Arc<WebState>) -> Result<McpGlobalPolicy, AppError>
 fn ensure_allowed(policy: &McpGlobalPolicy, connection_id: &str) -> Result<(), AppError> {
     if policy.allowed_connection_ids.as_ref().is_some_and(|allowed| !allowed.iter().any(|id| id == connection_id)) {
         return Err(AppError::from(format!(
-            "CONNECTION_OUT_OF_SCOPE: connection '{connection_id}' is not allowed by PanDB MCP settings"
+            "CONNECTION_OUT_OF_SCOPE: connection '{connection_id}' is not allowed by Arch-GPT DB MCP settings"
         )));
     }
     Ok(())
@@ -316,11 +316,11 @@ async fn ensure_write_with_risk(
     let policy = load_policy(state).await?;
     ensure_allowed(&policy, connection_id)?;
     if policy.read_only {
-        return Err(AppError::from(format!("MCP_READ_ONLY: PanDB MCP read-only mode is enabled. {action} blocked.")));
+        return Err(AppError::from(format!("MCP_READ_ONLY: Arch-GPT DB MCP read-only mode is enabled. {action} blocked.")));
     }
     if dangerous && !policy.allow_dangerous_sql {
         return Err(AppError::from(format!(
-            "SQL_BLOCKED: High-risk operation '{action}' is disabled in PanDB MCP settings."
+            "SQL_BLOCKED: High-risk operation '{action}' is disabled in Arch-GPT DB MCP settings."
         )));
     }
     let config = load_connection(state, connection_id).await?;
@@ -360,11 +360,11 @@ pub async fn ensure_sql(
     let is_write = dbx_core::query_execution_sql::is_write_sql_for_database(sql, config.db_type);
     if policy.read_only && is_write {
         return Err(AppError::from(
-            "MCP_READ_ONLY: PanDB MCP read-only mode is enabled. SQL write blocked.".to_string(),
+            "MCP_READ_ONLY: Arch-GPT DB MCP read-only mode is enabled. SQL write blocked.".to_string(),
         ));
     }
     if !policy.allow_dangerous_sql && dbx_core::sql_risk::is_dangerous_sql_for_database(sql, config.db_type) {
-        return Err(AppError::from("SQL_BLOCKED: High-risk SQL is disabled in PanDB MCP settings.".to_string()));
+        return Err(AppError::from("SQL_BLOCKED: High-risk SQL is disabled in Arch-GPT DB MCP settings.".to_string()));
     }
     if config.read_only {
         dbx_core::query_execution_sql::check_read_only(sql, &config.name, config.db_type)

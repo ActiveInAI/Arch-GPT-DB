@@ -1,6 +1,6 @@
 # Crates
 
-Rust crates for PanDB live here.
+Rust crates for Arch-GPT DB live here.
 
 ## Directories
 

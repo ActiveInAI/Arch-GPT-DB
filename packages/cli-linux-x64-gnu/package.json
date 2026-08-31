@@ -1,11 +1,11 @@
 {
   "name": "@dbx-app/cli-linux-x64-gnu",
-  "version": "0.4.55",
-  "description": "Precompiled PanDB CLI binary for Linux x64 glibc",
+  "version": "0.4.74",
+  "description": "Precompiled DBX CLI binary for Linux x64 glibc",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ActiveInAI/PanDB",
+    "url": "https://github.com/ActiveInAI/Arch-GPT-DB",
     "directory": "packages/cli-linux-x64-gnu"
   },
   "os": [

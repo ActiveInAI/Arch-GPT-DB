@@ -1,8 +1,8 @@
 use serde::{Deserialize, Serialize};
 
-const LATEST_JSON_GITHUB_PATH: &str = "https://github.com/ActiveInAI/PanDB/releases/latest/download/latest.json";
-const GITHUB_RELEASE_API_PREFIX: &str = "https://api.github.com/repos/ActiveInAI/PanDB/releases/tags/v";
-const RELEASE_URL_PREFIX: &str = "https://github.com/ActiveInAI/PanDB/releases/tag/v";
+const LATEST_JSON_GITHUB_PATH: &str = "https://github.com/ActiveInAI/Arch-GPT-DB/releases/latest/download/latest.json";
+const GITHUB_RELEASE_API_PREFIX: &str = "https://api.github.com/repos/ActiveInAI/Arch-GPT DB/releases/tags/v";
+const RELEASE_URL_PREFIX: &str = "https://github.com/ActiveInAI/Arch-GPT-DB/releases/tag/v";
 
 #[derive(Debug, Deserialize)]
 pub struct TauriRelease {
@@ -92,7 +92,7 @@ fn update_check_candidates(source: crate::DownloadSource) -> Vec<String> {
 // 防止 sync-changelog 尚未更新时拿到旧版本英文 notes。
 async fn fetch_latest_release_notes_en(client: &reqwest::Client, expected_version: &str) -> Result<String, String> {
     let _ = (client, expected_version);
-    Err("Separate PanDB English release notes are not published yet.".to_string())
+    Err("Separate Arch-GPT DB English release notes are not published yet.".to_string())
 }
 
 fn is_chinese_locale(locale: &str) -> bool {
@@ -255,7 +255,7 @@ pub fn build_update_info(release: TauriRelease, current_version: &str) -> Update
     let release_name = github
         .and_then(|metadata| non_empty(metadata.name.as_deref()))
         .map(ToOwned::to_owned)
-        .unwrap_or_else(|| format!("PanDB v{latest_version}"));
+        .unwrap_or_else(|| format!("Arch-GPT DB v{latest_version}"));
     let release_url = github
         .and_then(|metadata| non_empty(metadata.html_url.as_deref()))
         .map(ToOwned::to_owned)
@@ -406,7 +406,7 @@ HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings
               "jdbc_plugin": {
                 "version": "0.1.3",
                 "protocol_version": 1,
-                "url": "https://github.com/ActiveInAI/PanDB/releases/latest/download/dbx-jdbc-plugin-latest.zip"
+                "url": "https://github.com/ActiveInAI/Arch-GPT-DB/releases/latest/download/dbx-jdbc-plugin-latest.zip"
               },
               "platforms": {}
             }"#,
@@ -417,7 +417,7 @@ HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings
 
         assert_eq!(jdbc.version, "0.1.3");
         assert_eq!(jdbc.protocol_version, 1);
-        assert_eq!(jdbc.url, "https://github.com/ActiveInAI/PanDB/releases/latest/download/dbx-jdbc-plugin-latest.zip");
+        assert_eq!(jdbc.url, "https://github.com/ActiveInAI/Arch-GPT-DB/releases/latest/download/dbx-jdbc-plugin-latest.zip");
     }
 
     #[test]
@@ -427,8 +427,8 @@ HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings
             notes: Some("See the assets below to download and install.".to_string()),
             jdbc_plugin: None,
             github: Some(GithubReleaseMetadata {
-                name: Some("PanDB v0.5.3".to_string()),
-                html_url: Some("https://github.com/ActiveInAI/PanDB/releases/tag/v0.5.3".to_string()),
+                name: Some("Arch-GPT DB v0.5.3".to_string()),
+                html_url: Some("https://github.com/ActiveInAI/Arch-GPT-DB/releases/tag/v0.5.3".to_string()),
                 body: Some("### 新功能\n\n真实发布说明".to_string()),
             }),
             notes_en: None,
@@ -436,8 +436,8 @@ HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings
 
         let info = build_update_info(release, "0.5.2");
 
-        assert_eq!(info.release_name, "PanDB v0.5.3");
-        assert_eq!(info.release_url, "https://github.com/ActiveInAI/PanDB/releases/tag/v0.5.3");
+        assert_eq!(info.release_name, "Arch-GPT DB v0.5.3");
+        assert_eq!(info.release_url, "https://github.com/ActiveInAI/Arch-GPT-DB/releases/tag/v0.5.3");
         assert_eq!(info.release_notes, "### 新功能\n\n真实发布说明");
         assert!(!info.portable_mode);
     }
@@ -450,8 +450,8 @@ HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings
             notes: Some("See the assets below to download and install.".to_string()),
             jdbc_plugin: None,
             github: Some(GithubReleaseMetadata {
-                name: Some("PanDB v0.5.3".to_string()),
-                html_url: Some("https://github.com/ActiveInAI/PanDB/releases/tag/v0.5.3".to_string()),
+                name: Some("Arch-GPT DB v0.5.3".to_string()),
+                html_url: Some("https://github.com/ActiveInAI/Arch-GPT-DB/releases/tag/v0.5.3".to_string()),
                 body: Some("### 新功能\n\n真实发布说明".to_string()),
             }),
             notes_en: Some("### New Features\n\nReal release notes".to_string()),
@@ -479,11 +479,11 @@ HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings
 
     #[test]
     fn update_check_candidates_follow_selected_source() {
-        let expected = vec!["https://github.com/ActiveInAI/PanDB/releases/latest/download/latest.json"];
+        let expected = vec!["https://github.com/ActiveInAI/Arch-GPT-DB/releases/latest/download/latest.json"];
         assert_eq!(super::update_check_candidates(crate::DownloadSource::Official), expected);
         assert_eq!(
             super::update_check_candidates(crate::DownloadSource::Cnb),
-            vec!["https://github.com/ActiveInAI/PanDB/releases/latest/download/latest.json"]
+            vec!["https://github.com/ActiveInAI/Arch-GPT-DB/releases/latest/download/latest.json"]
         );
     }
 }

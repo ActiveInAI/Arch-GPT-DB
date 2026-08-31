@@ -1,4 +1,4 @@
-# Source this file to complete PanDB database Make targets and DB=<product>@<version> values.
+# Source this file to complete Arch-GPT DB database Make targets and DB=<product>@<version> values.
 
 _dbx_make_repository_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../../.." && pwd)"
 if [[ -z ${_dbx_make_previous_completion+x} ]]; then

@@ -27,12 +27,15 @@ export interface TabResultSnapshot {
    * still return to the original result order.
    */
   resultLocalSortOriginalRows?: QueryResult["rows"];
+  resultLocalSortOriginalLargeValueCells?: QueryResult["large_value_cells"];
   resultLocalSortOriginalMongoDocuments?: QueryResult["mongo_documents"];
   resultLocalSortOriginalMongoCopyDocuments?: QueryResult["mongo_copy_documents"];
   resultRuns?: QueryTab["resultRuns"];
   activeResultRunId?: string;
   queryAnalysis?: QueryTab["queryAnalysis"];
   querySourceColumns?: QueryTab["querySourceColumns"];
+  resultColumnComments?: QueryTab["resultColumnComments"];
+  queryDisplaySourceColumns?: QueryTab["queryDisplaySourceColumns"];
   queryEditabilityReason?: QueryTab["queryEditabilityReason"];
   mongoEditTarget?: QueryTab["mongoEditTarget"];
   tableMeta?: QueryTab["tableMeta"];
@@ -48,6 +51,7 @@ interface ColumnarQueryResult {
   columns: string[];
   spatial_columns?: QueryResult["spatial_columns"];
   spatial_values?: QueryResult["spatial_values"];
+  large_value_cells?: QueryResult["large_value_cells"];
   execution_error?: true;
   statement_index?: number;
   column_types?: string[];
@@ -182,7 +186,7 @@ function openCacheDb(): Promise<IDBDatabase | null> {
     };
     request.onsuccess = () => resolve(request.result);
     request.onerror = () => {
-      console.warn("[PanDB][tab-result-cache:open:error]", request.error);
+      console.warn("[Arch-GPT DB][tab-result-cache:open:error]", request.error);
       resolve(null);
     };
     request.onblocked = () => resolve(null);
@@ -316,7 +320,11 @@ async function deleteIndexedDbCacheOwner(ownerId: string): Promise<void> {
 function clonePlain<T>(value: T): T {
   const raw = toRaw(value);
   if (typeof structuredClone === "function") return structuredClone(raw);
-  return JSON.parse(JSON.stringify(raw)) as T;
+  try {
+    return JSON.parse(JSON.stringify(raw)) as T;
+  } catch {
+    return raw;
+  }
 }
 
 function stripSessionIds(result: QueryResult | undefined): QueryResult | undefined {
@@ -328,6 +336,7 @@ function stripSessionIds(result: QueryResult | undefined): QueryResult | undefin
     column_types: result.column_types ? [...result.column_types] : undefined,
     spatial_columns: result.spatial_columns?.map((entry) => ({ column_index: entry.column_index, srid: entry.srid })),
     spatial_values: result.spatial_values?.map((row) => [...row]),
+    large_value_cells: result.large_value_cells?.map((cell) => ({ ...cell })),
     rows: result.rows.map((row) => [...row]),
     mongo_documents: result.mongo_documents ? clonePlain(result.mongo_documents) : undefined,
     mongo_copy_documents: result.mongo_copy_documents ? clonePlain(result.mongo_copy_documents) : undefined,
@@ -353,6 +362,7 @@ function stripResultRunSessionIds(resultRuns: QueryTab["resultRuns"]): QueryTab[
     result: stripSessionIds(run.result),
     results: stripResultSessionIds(run.results),
     resultLocalSortOriginalRows: run.resultLocalSortOriginalRows?.map((row) => [...row]),
+    resultLocalSortOriginalLargeValueCells: run.resultLocalSortOriginalLargeValueCells?.map((cell) => ({ ...cell })),
     resultLocalSortOriginalMongoDocuments: run.resultLocalSortOriginalMongoDocuments ? clonePlain(run.resultLocalSortOriginalMongoDocuments) : undefined,
     resultLocalSortOriginalMongoCopyDocuments: run.resultLocalSortOriginalMongoCopyDocuments ? clonePlain(run.resultLocalSortOriginalMongoCopyDocuments) : undefined,
     resultSessionId: undefined,
@@ -369,6 +379,7 @@ function toColumnarResult(result: QueryResult | undefined): ColumnarQueryResult 
     column_types: result.column_types ? [...result.column_types] : undefined,
     spatial_columns: result.spatial_columns?.map((entry) => ({ column_index: entry.column_index, srid: entry.srid })),
     spatial_values: result.spatial_values?.map((row) => [...row]),
+    large_value_cells: result.large_value_cells?.map((cell) => ({ ...cell })),
     columnValues,
     rowCount: result.rows.length,
     mongo_documents: result.mongo_documents ? clonePlain(result.mongo_documents) : undefined,
@@ -394,6 +405,7 @@ function fromColumnarResult(result: ColumnarQueryResult | undefined): QueryResul
     column_types: result.column_types ? [...result.column_types] : undefined,
     spatial_columns: result.spatial_columns?.map((entry) => ({ column_index: entry.column_index, srid: entry.srid })),
     spatial_values: result.spatial_values?.map((row) => [...row]),
+    large_value_cells: result.large_value_cells?.map((cell) => ({ ...cell })),
     rows,
     mongo_documents: result.mongo_documents ? clonePlain(result.mongo_documents) : undefined,
     mongo_copy_documents: result.mongo_copy_documents ? clonePlain(result.mongo_copy_documents) : undefined,
@@ -493,7 +505,7 @@ async function writeRemoteRuntimeCache(key: string, bytes: Uint8Array, stats: { 
     });
     return response.ok;
   } catch (error) {
-    console.warn("[PanDB][tab-result-cache:remote-write:error]", { key, error });
+    console.warn("[Arch-GPT DB][tab-result-cache:remote-write:error]", { key, error });
     return false;
   }
 }
@@ -558,7 +570,7 @@ async function readRemoteRuntimeCache(key: string): Promise<Uint8Array | undefin
     const entry = (await response.json()) as { payloadBase64?: string } | null;
     return entry?.payloadBase64 ? base64ToBytes(entry.payloadBase64) : undefined;
   } catch (error) {
-    console.warn("[PanDB][tab-result-cache:remote-read:error]", { key, error });
+    console.warn("[Arch-GPT DB][tab-result-cache:remote-read:error]", { key, error });
     return undefined;
   }
 }
@@ -573,7 +585,7 @@ async function deleteRemoteRuntimeCache(key: string): Promise<void> {
     }
     await fetch(apiUrl(`/api/tab-runtime-cache?key=${encodeURIComponent(key)}`), { method: "DELETE" });
   } catch (error) {
-    console.warn("[PanDB][tab-result-cache:remote-delete:error]", { key, error });
+    console.warn("[Arch-GPT DB][tab-result-cache:remote-delete:error]", { key, error });
   }
 }
 
@@ -631,7 +643,7 @@ export async function writeResultCacheBackends(backends: ResultCacheBackend[], k
     try {
       if (await backend.write(key, bytes, stats, ownerId)) return true;
     } catch (error) {
-      console.warn("[PanDB][tab-result-cache:write:error]", { key, backend: backend.name, error });
+      console.warn("[Arch-GPT DB][tab-result-cache:write:error]", { key, backend: backend.name, error });
     }
   }
   return false;
@@ -643,7 +655,7 @@ export async function readResultCacheBackends(backends: ResultCacheBackend[], ke
       const bytes = await backend.read(key);
       if (bytes) return { bytes, backend };
     } catch (error) {
-      console.warn("[PanDB][tab-result-cache:read:error]", { key, backend: backend.name, error });
+      console.warn("[Arch-GPT DB][tab-result-cache:read:error]", { key, backend: backend.name, error });
     }
   }
   return undefined;
@@ -721,6 +733,8 @@ export function buildTabResultSnapshot(tab: QueryTab): TabResultSnapshot | undef
     activeResultRunId: tab.activeResultRunId,
     queryAnalysis: tab.queryAnalysis ? clonePlain(tab.queryAnalysis) : undefined,
     querySourceColumns: tab.querySourceColumns ? [...tab.querySourceColumns] : undefined,
+    resultColumnComments: tab.resultColumnComments ? clonePlain(tab.resultColumnComments) : undefined,
+    queryDisplaySourceColumns: tab.queryDisplaySourceColumns ? [...tab.queryDisplaySourceColumns] : undefined,
     queryEditabilityReason: tab.queryEditabilityReason,
     mongoEditTarget: tab.mongoEditTarget ? clonePlain(tab.mongoEditTarget) : undefined,
     tableMeta: tab.tableMeta ? clonePlain(tab.tableMeta) : undefined,
@@ -788,7 +802,7 @@ export async function deleteTabResultSnapshot(key: string): Promise<void> {
     await Promise.all(availableResultCacheBackends().map((backend) => backend.delete(key)));
     clearVersionLater();
   } catch (error) {
-    console.warn("[PanDB][tab-result-cache:delete:error]", { key, error });
+    console.warn("[Arch-GPT DB][tab-result-cache:delete:error]", { key, error });
     clearVersionLater();
   }
 }

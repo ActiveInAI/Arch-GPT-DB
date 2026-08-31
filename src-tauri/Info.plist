@@ -3,6 +3,6 @@
 <plist version="1.0">
 <dict>
   <key>NSLocalNetworkUsageDescription</key>
-  <string>PanDB needs local network access to connect to database servers on your LAN.</string>
+  <string>Arch-GPT DB needs local network access to connect to database servers on your LAN.</string>
 </dict>
 </plist>

@@ -207,7 +207,7 @@ pub fn start(app_handle: AppHandle, state: Arc<AppState>, data_dir: PathBuf) {
         log::info!("MCP bridge listening on {BIND_ADDR}");
         let actual_port = listener.local_addr().map(|a| a.port()).unwrap_or(0);
         log::info!("MCP bridge assigned port {actual_port}");
-        // Publish into PanDB's resolved data dir so DBX_DATA_DIR and portable mode share the same discovery file.
+        // Publish into Arch-GPT DB's resolved data dir so DBX_DATA_DIR and portable mode share the same discovery file.
         if let Err(err) = write_port_file(&data_dir, actual_port) {
             log::warn!("MCP bridge failed to write port file in {}: {err}", data_dir.display());
         }
@@ -552,7 +552,7 @@ fn mcp_policy_unavailable(error: String) -> String {
 fn ensure_connection_in_mcp_scope(policy: &McpGlobalPolicy, connection_id: &str) -> Result<(), String> {
     if policy.allowed_connection_ids.as_ref().is_some_and(|allowed| !allowed.iter().any(|id| id == connection_id)) {
         return Err(format!(
-            "CONNECTION_OUT_OF_SCOPE: connection '{connection_id}' is not allowed by PanDB MCP settings"
+            "CONNECTION_OUT_OF_SCOPE: connection '{connection_id}' is not allowed by Arch-GPT DB MCP settings"
         ));
     }
     Ok(())
@@ -577,10 +577,10 @@ async fn ensure_mcp_write_allowed_with_risk(
     let policy = load_mcp_policy(state).await?;
     ensure_connection_in_mcp_scope(&policy, &config.id)?;
     if policy.read_only {
-        return Err(format!("MCP_READ_ONLY: PanDB MCP read-only mode is enabled. {action} blocked."));
+        return Err(format!("MCP_READ_ONLY: Arch-GPT DB MCP read-only mode is enabled. {action} blocked."));
     }
     if dangerous && !policy.allow_dangerous_sql {
-        return Err(format!("SQL_BLOCKED: High-risk operation '{action}' is disabled in PanDB MCP settings."));
+        return Err(format!("SQL_BLOCKED: High-risk operation '{action}' is disabled in Arch-GPT DB MCP settings."));
     }
     if config.read_only {
         return Err(format!(
@@ -913,10 +913,10 @@ async fn ensure_mcp_sql_allowed(
     ensure_mcp_sql_database_switch_allowed(config.db_type, sql)?;
     let is_write = dbx_core::query_execution_sql::is_write_sql_for_database(sql, config.db_type);
     if policy.read_only && is_write {
-        return Err("MCP_READ_ONLY: PanDB MCP read-only mode is enabled. SQL write blocked.".to_string());
+        return Err("MCP_READ_ONLY: Arch-GPT DB MCP read-only mode is enabled. SQL write blocked.".to_string());
     }
     if !policy.allow_dangerous_sql && dbx_core::sql_risk::is_dangerous_sql_for_database(sql, config.db_type) {
-        return Err("SQL_BLOCKED: High-risk SQL is disabled in PanDB MCP settings.".to_string());
+        return Err("SQL_BLOCKED: High-risk SQL is disabled in Arch-GPT DB MCP settings.".to_string());
     }
     ensure_mcp_connection_sql_write_allowed(config, is_write)?;
     if is_write && dbx_core::production_safety::targets_production_database(config, database, sql) {

@@ -1,9 +1,9 @@
 ---
 title: Schema Browser and Object Tree
-description: Organize connections, search database objects, open data and structure, and run database-specific actions from the PanDB sidebar.
+description: Organize connections, search database objects, open data and structure, and run database-specific actions from the Arch-GPT DB sidebar.
 ---
 
-The object tree is the main navigation surface in PanDB. It displays more than databases, schemas, tables, and columns: it also manages connection groups, visible scope, object search, pins, copy/paste, schema actions, specialized workspaces, and administration views.
+The object tree is the main navigation surface in Arch-GPT DB. It displays more than databases, schemas, tables, and columns: it also manages connection groups, visible scope, object search, pins, copy/paste, schema actions, specialized workspaces, and administration views.
 
 ## Connection and Object Hierarchy
 
@@ -27,7 +27,7 @@ The actual hierarchy follows the database model:
 | Doris / StarRocks | Catalog → database → table when multiple catalogs exist; flat when only `internal` exists |
 | Redis | Connection → Redis DB, with paged keys in the dedicated browser |
 | MongoDB | Connection → database → collections, indexes, and GridFS buckets |
-| Elasticsearch / Easysearch | Connection → indexes and other document objects |
+| Elasticsearch / Easysearch / Meilisearch | Connection → indexes and other document objects |
 | HBase, vector, message queue, etcd, ZooKeeper, Nacos | System-specific objects that open [Specialized Workspaces](/en/docs/specialized-workspaces) |
 
 ## Connection Groups and Bulk Management
@@ -39,7 +39,7 @@ The actual hierarchy follows the database model:
 - Copy a connection name or duplicate the full connection as a new entry
 - Inspect host, port, database type, and other summaries in connection tooltips
 
-Supported connection imports can retain group information. When sidebar layouts move between devices, PanDB remaps connection IDs.
+Supported connection imports can retain group information. When sidebar layouts move between devices, Arch-GPT DB remaps connection IDs.
 
 ## Expand, Collapse, and Pin
 
@@ -120,12 +120,12 @@ Cross-database copying involves type mapping, defaults, constraints, and identit
 
 ## Database-Specific Hierarchies
 
-PanDB does not force every system into a relational tree. For example:
+Arch-GPT DB does not force every system into a relational tree. For example:
 
 - SQL Server can expose linked servers and database objects
 - Doris / StarRocks support external catalogs and three-part names for external tables
 - MongoDB exposes collections, indexes, and GridFS
-- Elasticsearch / Easysearch model indexes as first-class objects
+- Elasticsearch / Easysearch / Meilisearch model indexes as first-class objects
 - Dameng, Oracle, PostgreSQL, and others can expose routines, jobs, extensions, or administration objects
 - etcd, Nacos, message queues, and vector databases open dedicated workspaces from tree nodes
 

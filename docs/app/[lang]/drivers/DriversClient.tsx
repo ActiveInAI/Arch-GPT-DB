@@ -11,15 +11,15 @@ const i18n = {
     title: "Offline Driver Downloads",
     subtitle: "Download database drivers and JRE packages for offline use. Search for the exact resource your air-gapped environment needs.",
     jdbcPlugin: "JDBC Plugin",
-    jdbcPluginDesc: "Install this optional PanDB sidecar before using custom JDBC connections. Database vendor JDBC driver JARs still need to be imported separately.",
+    jdbcPluginDesc: "Install this optional Arch-GPT DB sidecar before using custom JDBC connections. Database vendor JDBC driver JARs still need to be imported separately.",
     jdbcPluginFile: "Plugin package",
-    jdbcPluginInstallHint: "Import this ZIP in PanDB from Settings > Driver Manager > JDBC Drivers > Local Install.",
+    jdbcPluginInstallHint: "Import this ZIP in Arch-GPT DB from Settings > Driver Manager > JDBC Drivers > Local Install.",
     bundles: "Offline Bundles",
     bundlesDesc: "Platform-specific ZIP packages that include the agent registry, database drivers, native agents, and the matching JRE.",
     drivers: "Database Drivers",
     driversDesc: "Single-driver .tar.zst packages for Java agents. Install the matching JRE separately when it is not already available.",
     nativeAgents: "Native Agents",
-    nativeAgentsDesc: "Platform-specific .tar.zst packages for DuckDB, Oracle, KingBase, XuguDB, and RabbitMQ. Import the package directly in Driver Manager.",
+    nativeAgentsDesc: "Platform-specific .tar.zst packages for DuckDB, Oracle, KingbaseES, XuguDB, and RabbitMQ. Import the package directly in Driver Manager.",
     jre: "Java Runtime (JRE)",
     jreDesc: "JRE packages used by Java agent-based database drivers such as SQL Server and Dameng.",
     download: "Download",
@@ -41,21 +41,21 @@ const i18n = {
       cnb: "CNB",
       official: "Official",
     },
-    downloadHint: "For air-gapped environments: download the bundle for your platform on an internet-connected machine, then transfer it to the offline machine and import it in PanDB from Settings > Driver Manager. Use the driver and JRE tabs only when you need individual artifacts.",
+    downloadHint: "For air-gapped environments: download the bundle for your platform on an internet-connected machine, then transfer it to the offline machine and import it in Arch-GPT DB from Settings > Driver Manager. Use the driver and JRE tabs only when you need individual artifacts.",
   },
   cn: {
     title: "离线驱动下载",
     subtitle: "下载数据库驱动和 JRE 离线包。搜索内网环境需要的资源，在有网机器下载后传输。",
     jdbcPlugin: "JDBC 插件",
-    jdbcPluginDesc: "使用自定义 JDBC 连接前先安装这个 PanDB 可选插件。数据库厂商的 JDBC Driver JAR 仍需单独导入。",
+    jdbcPluginDesc: "使用自定义 JDBC 连接前先安装这个 Arch-GPT DB 可选插件。数据库厂商的 JDBC Driver JAR 仍需单独导入。",
     jdbcPluginFile: "插件包",
-    jdbcPluginInstallHint: "在 PanDB 的“设置 > 驱动管理 > JDBC 驱动 > 本地安装”中导入这个 ZIP。",
+    jdbcPluginInstallHint: "在 Arch-GPT DB 的“设置 > 驱动管理 > JDBC 驱动 > 本地安装”中导入这个 ZIP。",
     bundles: "整包下载",
     bundlesDesc: "按平台提供的 ZIP 离线包，包含 Agent registry、数据库驱动、原生 Agent 和匹配的 JRE。",
     drivers: "数据库驱动",
     driversDesc: "Java Agent 的单驱动 .tar.zst 包；目标机器尚未安装 JRE 时需要另外安装一次对应 JRE。",
     nativeAgents: "原生 Agent",
-    nativeAgentsDesc: "DuckDB、Oracle、人大金仓、虚谷和 RabbitMQ 的按平台 .tar.zst 单驱动包，可直接在驱动管理中导入。",
+    nativeAgentsDesc: "DuckDB、Oracle、金仓KingbaseES、虚谷和 RabbitMQ 的按平台 .tar.zst 单驱动包，可直接在驱动管理中导入。",
     jre: "Java 运行时 (JRE)",
     jreDesc: "Java Agent 驱动所需的 JRE 环境，例如 SQL Server、达梦等连接会使用。",
     download: "下载",
@@ -77,7 +77,7 @@ const i18n = {
       cnb: "CNB",
       official: "官方下载",
     },
-    downloadHint: "内网环境使用说明：在有网的电脑上下载对应平台的整包，然后传输到内网机器，在 PanDB 的“设置 > 驱动管理”中导入。只有需要单个产物时再使用驱动和 JRE 标签页。",
+    downloadHint: "内网环境使用说明：在有网的电脑上下载对应平台的整包，然后传输到内网机器，在 Arch-GPT DB 的“设置 > 驱动管理”中导入。只有需要单个产物时再使用驱动和 JRE 标签页。",
   },
 };
 
@@ -417,7 +417,7 @@ export function DriversClient({ initialCatalog }: { initialCatalog: AgentDownloa
                                 className="h-8 min-w-[190px] rounded-[6px] border border-landing-line bg-black/10 px-2.5 text-xs text-landing-ink outline-none transition-colors focus:border-landing-blue max-[760px]:w-full"
                               >
                                 {group.options.map((option) => (
-                                  <option key={nativeKey(option)} value={option.platformKey} className="bg-[#10151d] text-landing-ink">
+                                  <option key={nativeKey(option)} value={option.platformKey} className="bg-[#121317] text-landing-ink">
                                     {option.platformLabel}
                                   </option>
                                 ))}

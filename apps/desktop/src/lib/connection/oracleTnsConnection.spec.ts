@@ -24,6 +24,6 @@ describe("Oracle TNS connection settings", () => {
   });
 
   it("ignores malformed encoded aliases instead of breaking connection editing", () => {
-    expect(parseOracleTnsConnectionString("jdbc:oracle:thin:@PanDB%ZZ?TNS_ADMIN=%2Fopt%2Foracle")).toBeNull();
+    expect(parseOracleTnsConnectionString("jdbc:oracle:thin:@Arch-GPT DB%ZZ?TNS_ADMIN=%2Fopt%2Foracle")).toBeNull();
   });
 });

@@ -53,7 +53,7 @@ function readEntries(): DebugLogEntry[] {
 }
 
 function redactSensitiveText(value: string): string {
-  return value.replace(/("(?:password|passphrase|apiKey|api_key|token|secret|connectionString|connection_string)"\s*:\s*")([^"]*)(")/gi, "$1[redacted]$3").replace(/\b(password|passphrase|apiKey|api_key|token|secret)=([^&\s]+)/gi, "$1=[redacted]");
+  return value.replace(/("[^"]*(?:password|passphrase|api[_-]?key|token|secret|jwt|connection[_-]?string)[^"]*"\s*:\s*")([^"]*)(")/gi, "$1[redacted]$3").replace(/\b([^=&\s]*(?:password|passphrase|api[_-]?key|token|secret|jwt)[^=&\s]*)=([^&\s]+)/gi, "$1=[redacted]");
 }
 
 function formatValue(value: unknown, seen = new WeakSet<object>()): string {
@@ -118,7 +118,7 @@ export function appendDebugLog(level: DebugLogLevel, ...args: unknown[]) {
 export function setDebugLoggingEnabled(enabled: boolean) {
   safeLocalStorageSet(DEBUG_LOG_ENABLED_KEY, enabled ? "1" : "0");
   if (enabled) {
-    appendDebugLog("info", "[PanDB][debug-log] enabled", {
+    appendDebugLog("info", "[Arch-GPT DB][debug-log] enabled", {
       url: location.href,
       viewport: `${window.innerWidth}x${window.innerHeight}`,
       devicePixelRatio: window.devicePixelRatio,
@@ -134,7 +134,7 @@ export function clearDebugLogs() {
 
 export function getDebugLogText(): string {
   const entries = readEntries();
-  const header = [`PanDB debug log`, `Exported: ${formatLocalTimestamp()}`, `User agent: ${navigator.userAgent}`, `Platform: ${navigator.platform}`, `Timezone: ${Intl.DateTimeFormat().resolvedOptions().timeZone || "unknown"}`, ""];
+  const header = [`Arch-GPT DB debug log`, `Exported: ${formatLocalTimestamp()}`, `User agent: ${navigator.userAgent}`, `Platform: ${navigator.platform}`, `Timezone: ${Intl.DateTimeFormat().resolvedOptions().timeZone || "unknown"}`, ""];
   const body = entries.map((entry) => `[${entry.timestamp}] [${entry.level.toUpperCase()}] ${entry.message}`);
   return [...header, ...body].join("\n");
 }

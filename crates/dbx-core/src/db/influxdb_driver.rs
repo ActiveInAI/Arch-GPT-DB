@@ -347,7 +347,7 @@ pub async fn list_databases(client: &InfluxdbClient) -> Result<Vec<DatabaseInfo>
         return Ok(influx_v2_buckets(client, Duration::from_secs(30))
             .await?
             .into_iter()
-            .map(|bucket| DatabaseInfo { name: bucket.name })
+            .map(|bucket| DatabaseInfo { name: bucket.name, ..Default::default() })
             .collect());
     }
     let result = influx_query(client, "SHOW DATABASES", None).await?;
@@ -356,7 +356,7 @@ pub async fn list_databases(client: &InfluxdbClient) -> Result<Vec<DatabaseInfo>
         .iter()
         .flat_map(|r| &r.series)
         .flat_map(|s| &s.values)
-        .map(|row| DatabaseInfo { name: row[0].as_str().unwrap_or("").to_string() })
+        .map(|row| DatabaseInfo { name: row[0].as_str().unwrap_or("").to_string(), ..Default::default() })
         .collect())
 }
 
@@ -485,6 +485,7 @@ pub async fn execute_query(client: &InfluxdbClient, database: &str, sql: &str) -
             session_id: None,
             has_more: false,
             elasticsearch_raw_body: None,
+            messages: Vec::new(),
         }),
         None => Ok(QueryResult {
             columns: vec![],
@@ -499,6 +500,7 @@ pub async fn execute_query(client: &InfluxdbClient, database: &str, sql: &str) -
             session_id: None,
             has_more: false,
             elasticsearch_raw_body: None,
+            messages: Vec::new(),
         }),
     }
 }
@@ -645,6 +647,7 @@ fn parse_flux_csv(text: &str, start: Instant) -> Result<QueryResult, String> {
         session_id: None,
         has_more: false,
         elasticsearch_raw_body: None,
+        messages: Vec::new(),
     })
 }
 
@@ -730,7 +733,7 @@ mod tests {
             "database": "metrics",
             "external_config": {
                 "version": "2",
-                "org": "PanDB Org"
+                "org": "Arch-GPT DB Org"
             }
         }))
         .unwrap();
@@ -740,12 +743,12 @@ mod tests {
         assert_eq!(client.version, InfluxdbApiVersion::V2);
         assert_eq!(client.username, None);
         assert_eq!(client.password.as_deref(), Some("token-value"));
-        assert_eq!(client.org.as_deref(), Some("PanDB Org"));
+        assert_eq!(client.org.as_deref(), Some("Arch-GPT DB Org"));
         assert_eq!(
             build_v2_buckets_url(&client, 0).unwrap(),
-            "http://localhost:8086/api/v2/buckets?org=PanDB%20Org&limit=100&offset=0"
+            "http://localhost:8086/api/v2/buckets?org=Arch-GPT DB%20Org&limit=100&offset=0"
         );
-        assert_eq!(build_v2_query_url(&client).unwrap(), "http://localhost:8086/api/v2/query?org=PanDB%20Org");
+        assert_eq!(build_v2_query_url(&client).unwrap(), "http://localhost:8086/api/v2/query?org=Arch-GPT DB%20Org");
     }
 
     #[test]

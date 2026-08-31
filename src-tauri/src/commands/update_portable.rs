@@ -8,7 +8,7 @@ use std::io::{Cursor, Read};
 const MAX_PORTABLE_EXECUTABLE_BYTES: usize = 256 * 1024 * 1024;
 const MAX_PORTABLE_MANIFEST_BYTES: usize = 16 * 1024;
 const EMBEDDED_TAURI_CONFIG: &str = include_str!("../../tauri.conf.json");
-const PORTABLE_EXECUTABLE_NAME: &str = "PanDB.exe";
+const PORTABLE_EXECUTABLE_NAME: &str = "Arch-GPT DB.exe";
 const PORTABLE_UPDATE_MANIFEST_NAME: &str = "portable-update.json";
 const PORTABLE_UPDATE_MANIFEST_SCHEMA_VERSION: u32 = 1;
 
@@ -60,7 +60,7 @@ fn portable_arch_label(arch: &str) -> Result<&'static str, String> {
 pub(super) fn portable_asset_name(version: &str, arch: &str) -> Result<String, String> {
     let version = parse_portable_version(version, "requested")?;
     let arch = portable_arch_label(arch)?;
-    Ok(format!("PanDB_{version}_{arch}-portable.zip"))
+    Ok(format!("Arch-GPT DB_{version}_{arch}-portable.zip"))
 }
 
 pub(super) fn verify_portable_archive(
@@ -84,7 +84,7 @@ pub(super) fn verify_portable_archive(
     public_key
         .verify(archive, &signature, true)
         .map_err(|error| format!("Portable update signature verification failed: {error}"))?;
-    // The manifest lives inside the signed ZIP and hashes PanDB.exe, binding the
+    // The manifest lives inside the signed ZIP and hashes Arch-GPT DB.exe, binding the
     // requested version and architecture to the exact executable we install.
     validated_portable_executable(archive, expected_version, expected_arch).map(|_| ())
 }
@@ -152,7 +152,7 @@ fn validated_portable_executable(
     file.by_ref()
         .take((MAX_PORTABLE_EXECUTABLE_BYTES + 1) as u64)
         .read_to_end(&mut executable)
-        .map_err(|error| format!("Failed to extract PanDB.exe from update ZIP: {error}"))?;
+        .map_err(|error| format!("Failed to extract Arch-GPT DB.exe from update ZIP: {error}"))?;
     if executable.len() > MAX_PORTABLE_EXECUTABLE_BYTES {
         return Err("Portable update executable is unexpectedly large.".to_string());
     }
@@ -185,7 +185,7 @@ pub(super) fn launch_portable_update_helper(archive: &[u8], version: &Version) -
         std::env::current_exe().map_err(|error| format!("Failed to locate the portable executable: {error}"))?;
     let exe_dir = current_exe.parent().ok_or_else(|| "Portable executable directory is unavailable.".to_string())?;
     if !exe_dir.join("portable.pandb").is_file() && !exe_dir.join("portable.dbx").is_file() {
-        return Err("Portable update marker is missing beside PanDB.exe.".to_string());
+        return Err("Portable update marker is missing beside Arch-GPT DB.exe.".to_string());
     }
 
     let timestamp = SystemTime::now()
@@ -198,16 +198,16 @@ pub(super) fn launch_portable_update_helper(archive: &[u8], version: &Version) -
         .create_new(true)
         .write(true)
         .open(&write_probe)
-        .map_err(|error| format!("The portable PanDB directory is not writable: {error}"))?;
+        .map_err(|error| format!("The portable Arch-GPT DB directory is not writable: {error}"))?;
     fs::remove_file(&write_probe)
         .map_err(|error| format!("Failed to finish portable directory write check: {error}"))?;
 
     let staging_dir = std::env::temp_dir().join(format!("dbx-portable-update-{update_id}"));
     fs::create_dir(&staging_dir)
         .map_err(|error| format!("Failed to create portable update staging directory: {error}"))?;
-    let staged_exe = staging_dir.join("PanDB.exe.new");
+    let staged_exe = staging_dir.join("Arch-GPT DB.exe.new");
     let script_path = staging_dir.join("apply-update.ps1");
-    let backup_exe = exe_dir.join(format!(".PanDB-{update_id}.old.exe"));
+    let backup_exe = exe_dir.join(format!(".Arch-GPT DB-{update_id}.old.exe"));
 
     let prepare_result = (|| -> Result<(), String> {
         let executable = validated_portable_executable(archive, version, std::env::consts::ARCH)?;
@@ -215,11 +215,11 @@ pub(super) fn launch_portable_update_helper(archive: &[u8], version: &Version) -
             .create_new(true)
             .write(true)
             .open(&staged_exe)
-            .map_err(|error| format!("Failed to stage portable PanDB executable: {error}"))?;
+            .map_err(|error| format!("Failed to stage portable Arch-GPT DB executable: {error}"))?;
         staged_file
             .write_all(&executable)
             .and_then(|_| staged_file.sync_all())
-            .map_err(|error| format!("Failed to write portable PanDB executable: {error}"))?;
+            .map_err(|error| format!("Failed to write portable Arch-GPT DB executable: {error}"))?;
         fs::write(&script_path, PORTABLE_UPDATE_SCRIPT)
             .map_err(|error| format!("Failed to create portable update helper: {error}"))?;
 
@@ -277,7 +277,7 @@ for ($attempt = 0; $attempt -lt 120; $attempt++) {
         }
 
         if (-not (Test-Path -LiteralPath $BackupExe)) {
-            throw 'The existing PanDB executable could not be backed up.'
+            throw 'The existing Arch-GPT DB executable could not be backed up.'
         }
 
         Move-Item -LiteralPath $SourceExe -Destination $TargetExe -Force
@@ -345,8 +345,8 @@ mod tests {
 
     #[test]
     fn builds_portable_asset_names_for_windows_architectures() {
-        assert_eq!(portable_asset_name("0.5.64", "x86_64").unwrap(), "PanDB_0.5.64_x64-portable.zip");
-        assert_eq!(portable_asset_name("v0.5.64-beta.1", "aarch64").unwrap(), "PanDB_0.5.64-beta.1_arm64-portable.zip");
+        assert_eq!(portable_asset_name("0.5.64", "x86_64").unwrap(), "Arch-GPT DB_0.5.64_x64-portable.zip");
+        assert_eq!(portable_asset_name("v0.5.64-beta.1", "aarch64").unwrap(), "Arch-GPT DB_0.5.64-beta.1_arm64-portable.zip");
         assert!(portable_asset_name("0.5.64", "x86").is_err());
         assert!(portable_asset_name("../../0.5.64", "x86_64").is_err());
     }

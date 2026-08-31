@@ -1,12 +1,12 @@
 ---
 title: 从源码编译与参与贡献
-description: 从零搭建 PanDB 开发环境，运行桌面版，完成第一次修改、测试并提交 Pull Request。
+description: 从零搭建 Arch-GPT DB 开发环境，运行桌面版，完成第一次修改、测试并提交 Pull Request。
 ---
 
-这是一份面向第一次参与 PanDB 开发者的完整教程。跟着本页操作，你将完成：
+这是一份面向第一次参与 Arch-GPT DB 开发者的完整教程。跟着本页操作，你将完成：
 
 1. 准备 Node.js、pnpm、Rust 和系统编译依赖
-2. Fork、克隆并运行 PanDB 桌面版
+2. Fork、克隆并运行 Arch-GPT DB 桌面版
 3. 找到要修改的代码并完成一次小改动
 4. 运行与改动范围匹配的检查和测试
 5. 推送分支并提交 Pull Request
@@ -17,7 +17,7 @@ description: 从零搭建 PanDB 开发环境，运行桌面版，完成第一次
 
 ## 1. 选择并认领任务
 
-打开 [PanDB Issues](https://github.com/ActiveInAI/PanDB/issues)，选择一个尚未分配、评论中也没有人正在处理的 Issue。第一次贡献优先考虑：
+打开 [Arch-GPT DB Issues](https://github.com/ActiveInAI/Arch-GPT DB/issues)，选择一个尚未分配、评论中也没有人正在处理的 Issue。第一次贡献优先考虑：
 
 - 复现步骤和预期行为已经写清楚的问题
 - 改动范围较小的文档、翻译或 UI 问题
@@ -37,7 +37,7 @@ description: 从零搭建 PanDB 开发环境，运行桌面版，完成第一次
 
 ## 2. 安装开发环境
 
-PanDB 桌面版基于 Tauri、Vue 和 Rust。仓库当前要求：
+Arch-GPT DB 桌面版基于 Tauri、Vue 和 Rust。仓库当前要求：
 
 | 工具 | 版本 |
 | --- | --- |
@@ -45,7 +45,7 @@ PanDB 桌面版基于 Tauri、Vue 和 Rust。仓库当前要求：
 | pnpm | 10.27.0 |
 | Rust | 1.88 或更高版本 |
 | Git | 当前稳定版本 |
-| Make | macOS 和 Linux 推荐使用 |
+| Make | macOS 和 Linux 需要；Windows 可选 |
 
 ### 安装 Node.js 和 pnpm
 
@@ -75,7 +75,7 @@ cargo --version
 
 ### 安装系统依赖
 
-Tauri 的完整系统要求可以参考 [Tauri 官方前置依赖文档](https://v2.tauri.app/start/prerequisites/)。PanDB 还需要 ODBC 开发库。
+Tauri 的完整系统要求可以参考 [Tauri 官方前置依赖文档](https://v2.tauri.app/start/prerequisites/)。Arch-GPT DB 还需要 ODBC 开发库。
 
 <Tabs groupId="contributing-platform" items={["macOS", "Ubuntu / Debian", "Windows"]}>
   <Tab value="macOS">
@@ -106,7 +106,15 @@ Tauri 的完整系统要求可以参考 [Tauri 官方前置依赖文档](https:/
     1. 安装 [Microsoft C++ Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/)。
     2. 在安装器中选择 **Desktop development with C++**。
     3. 确认已安装 Windows 10/11 SDK 和 WebView2。Windows 11 通常已自带 WebView2。
-    4. 使用 PowerShell 执行本页的 Windows 命令。
+    4. 安装 [Strawberry Perl](https://github.com/StrawberryPerl/Perl-Dist-Strawberry/releases)（编译内置 OpenSSL 所需）：
+
+        ```powershell
+        winget install StrawberryPerl.StrawberryPerl
+        ```
+
+        DBX 默认启用 `sqlite-sqlcipher` 特性，需要从源码编译 SQLCipher 和 OpenSSL，而 Windows 上编译 OpenSSL 必须使用 Perl 执行 `Configure` 脚本。安装后请重新打开终端，使 `perl` 进入 `PATH`。
+
+    5. 使用 PowerShell 执行本页的 Windows 命令。
 
     Windows 不必安装 Make，本页会同时给出对应的 pnpm 命令。
 
@@ -115,14 +123,14 @@ Tauri 的完整系统要求可以参考 [Tauri 官方前置依赖文档](https:/
 
 ## 3. Fork 和克隆仓库
 
-先在 GitHub 打开 [ActiveInAI/PanDB](https://github.com/ActiveInAI/PanDB)，点击右上角 **Fork** 创建自己的仓库副本。
+先在 GitHub 打开 [ActiveInAI/Arch-GPT DB](https://github.com/ActiveInAI/Arch-GPT DB)，点击右上角 **Fork** 创建自己的仓库副本。
 
 将下面的 `<你的 GitHub 用户名>` 替换为你的账号：
 
 ```bash
 git clone https://github.com/<你的 GitHub 用户名>/dbx.git
 cd dbx
-git remote add upstream https://github.com/ActiveInAI/PanDB.git
+git remote add upstream https://github.com/ActiveInAI/Arch-GPT DB.git
 git remote -v
 ```
 
@@ -141,7 +149,7 @@ git rebase upstream/main
 git push origin main
 ```
 
-## 4. 第一次运行 PanDB
+## 4. 第一次运行 Arch-GPT DB
 
 ### macOS 和 Linux
 
@@ -153,13 +161,13 @@ make
 
 `make` 会使用锁文件安装依赖，然后启动 Tauri 桌面开发环境。第一次编译 Rust 依赖需要较长时间，后续启动会明显更快。
 
-如需轻量桌面开发构建，可以保留 DuckDB sidecar 支持，同时跳过其他默认 Rust feature：
+如需轻量桌面开发构建，可以关闭默认 Rust feature，仅启用 DuckDB sidecar、DynamoDB 和 bundled SQLite：
 
 ```bash
 make dev-fast
 ```
 
-开发版可以与已安装的 PanDB 同时运行。两者使用同一份本地 PanDB 数据，因此连接和历史记录会同时可用；请避免在两个窗口中同时修改同一个连接、收藏 SQL 或全局设置。
+开发版可以与已安装的 Arch-GPT DB 同时运行。两者使用同一份本地 Arch-GPT DB 数据，因此连接和历史记录会同时可用；请避免在两个窗口中同时修改同一个连接、收藏 SQL 或全局设置。
 
 测试 MCP bridge 时，后启动的实例会写入共享的 `mcp-bridge-port` 发现文件并接收 MCP 请求。Redis PubSub 优先使用端口 `4224`（设置 `DBX_PORT` 时优先使用该端口）；端口被占用时会自动回退到可用的本地端口，前端会使用实际监听端口。
 
@@ -175,18 +183,18 @@ pnpm dev:tauri
 使用相同的轻量构建：
 
 ```powershell
-pnpm tauri dev -- --no-default-features --features duckdb-sidecar
+pnpm tauri dev -- --no-default-features --features duckdb-sidecar,dynamodb,sqlite-bundled
 ```
 
 ### 判断是否启动成功
 
-成功时会出现 PanDB 桌面窗口，并且终端中没有编译错误。建议完成三个快速检查：
+成功时会出现 Arch-GPT DB 桌面窗口，并且终端中没有编译错误。建议完成三个快速检查：
 
 1. 打开设置页面
 2. 创建或打开一个本地测试连接
 3. 关闭窗口后再次启动，确认开发环境可重复运行
 
-如果端口 `1420` 已被占用，先关闭旧的 PanDB/Vite 开发进程再重新启动。
+如果端口 `1420` 已被占用，先关闭旧的 Arch-GPT DB/Vite 开发进程再重新启动。
 
 ## 本地数据库测试环境
 
@@ -210,7 +218,7 @@ make db-down DB=mysql@8.4
 | `crates/dbx-core/` | 数据库连接、查询、元数据和共享 Rust 逻辑 |
 | `crates/dbx-web/` | Docker/Web 后端 |
 | `packages/app-tests/` | 前端共享逻辑测试 |
-| `packages/cli/` | PanDB CLI |
+| `packages/cli/` | Arch-GPT DB CLI |
 | `packages/mcp-server/` | MCP Server |
 | `docs/content/docs/` | 官网中英文文档 |
 | `agents/drivers/` | Java/JDBC 和部分原生数据库 Agent |
@@ -293,10 +301,10 @@ make cargo-test-fast
 
 ### 路线 D：修改 Agent 驱动
 
-Agent 是独立进程，通过 stdin/stdout JSON-RPC 与 PanDB 通信。Java/JDBC Agent 通常使用 JDK 21；原生 Agent 使用 Go 或 Rust。开始前先阅读：
+Agent 是独立进程，通过 stdin/stdout JSON-RPC 与 Arch-GPT DB 通信。Java/JDBC Agent 通常使用 JDK 21；原生 Agent 使用 Go 或 Rust。开始前先阅读：
 
-- [`agents/README.zh-CN.md`](https://github.com/ActiveInAI/PanDB/blob/main/agents/README.zh-CN.md)
-- [`agents/docs/agent-authoring.zh-CN.md`](https://github.com/ActiveInAI/PanDB/blob/main/agents/docs/agent-authoring.zh-CN.md)
+- [`agents/README.zh-CN.md`](https://github.com/ActiveInAI/Arch-GPT DB/blob/main/agents/README.zh-CN.md)
+- [`agents/docs/agent-authoring.zh-CN.md`](https://github.com/ActiveInAI/Arch-GPT DB/blob/main/agents/docs/agent-authoring.zh-CN.md)
 
 #### 修改现有 Java/JDBC Agent
 
@@ -314,7 +322,7 @@ Shadow JAR 输出在：
 agents/drivers/<驱动模块名>/build/libs/
 ```
 
-仅仅构建成功还不代表本地 PanDB 使用了新代码。PanDB 运行时读取用户目录下 `.dbx/agents/drivers/<db_type>/agent.jar`，因此必须备份并替换运行时 JAR：
+仅仅构建成功还不代表本地 Arch-GPT DB 使用了新代码。Arch-GPT DB 运行时读取用户目录下 `.dbx/agents/drivers/<db_type>/agent.jar`，因此必须备份并替换运行时 JAR：
 
 <Tabs groupId="agent-runtime-replace" items={["macOS / Linux", "Windows PowerShell"]}>
   <Tab value="macOS / Linux">
@@ -335,7 +343,7 @@ agents/drivers/<驱动模块名>/build/libs/
   </Tab>
 </Tabs>
 
-替换后重启 PanDB，或者断开并重新连接数据库，确保旧 Agent 进程退出并加载新 JAR。然后使用 Issue 对应的真实数据库版本重新执行复现步骤。
+替换后重启 Arch-GPT DB，或者断开并重新连接数据库，确保旧 Agent 进程退出并加载新 JAR。然后使用 Issue 对应的真实数据库版本重新执行复现步骤。
 
 #### `agents/versions.json` 什么时候修改
 
@@ -419,7 +427,7 @@ git push -u origin HEAD
 
 ## 9. 创建 Pull Request
 
-在 GitHub 打开你的 Fork，点击 **Compare & pull request**，目标仓库选择 `ActiveInAI/PanDB`，目标分支选择 `main`。
+在 GitHub 打开你的 Fork，点击 **Compare & pull request**，目标仓库选择 `ActiveInAI/Arch-GPT DB`，目标分支选择 `main`。
 
 PR 描述至少写清：
 
@@ -460,7 +468,7 @@ git push --force-with-lease
 
 ### 第一次 Rust 编译很慢
 
-这是正常现象。轻量桌面开发可以使用仍支持 DuckDB 的 `make dev-fast`。`make cargo-check-fast` 和 `make cargo-test-fast` 会跳过全部可选默认 feature，因此不会验证 DuckDB 专用路径。
+这是正常现象。轻量桌面开发可以使用 `make dev-fast`，它关闭默认 Rust feature，仅启用 DuckDB sidecar 和 DynamoDB。`make cargo-check-fast` 和 `make cargo-test-fast` 会跳过全部可选默认 feature，因此不会验证 DuckDB 专用路径。
 
 ### pnpm 提示版本不正确
 
@@ -482,6 +490,6 @@ corepack prepare pnpm@10.27.0 --activate
 
 - 在原 Issue 中描述卡点，并附完整错误信息和操作系统版本
 - 加入 [Discord](https://discord.gg/W7NyVDRt6a)
-- 查看仓库根目录的 [CONTRIBUTING.zh-CN.md](https://github.com/ActiveInAI/PanDB/blob/main/CONTRIBUTING.zh-CN.md)
+- 查看仓库根目录的 [CONTRIBUTING.zh-CN.md](https://github.com/ActiveInAI/Arch-GPT DB/blob/main/CONTRIBUTING.zh-CN.md)
 
 请不要只发送“编译失败”。至少附上执行的命令、错误日志中最早出现的错误、操作系统、Node.js、pnpm 和 Rust 版本。

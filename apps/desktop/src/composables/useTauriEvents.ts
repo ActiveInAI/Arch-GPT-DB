@@ -3,7 +3,13 @@ import { useQueryStore } from "@/stores/queryStore";
 import type { NavigationTarget } from "@/composables/useNavigationTargets";
 import type { QueryResult } from "@/types/database";
 
-export function useTauriEvents(deps: { openTableTarget: (target: NavigationTarget) => Promise<void>; openSqlFilePath: (path: string) => Promise<void>; openDbFilePath: (path: string) => Promise<void>; openConnectionDeepLink: (url: string) => Promise<void> }) {
+export function useTauriEvents(deps: {
+  openTableTarget: (target: NavigationTarget) => Promise<void>;
+  openSqlFilePath: (path: string) => Promise<void>;
+  openDbFilePath: (path: string) => Promise<void>;
+  openConnectionDeepLink: (url: string) => Promise<void>;
+  openAiConfigDeepLink: (url: string) => Promise<void>;
+}) {
   const connectionStore = useConnectionStore();
   const queryStore = useQueryStore();
   const unlistenHandles: Array<() => void> = [];
@@ -36,7 +42,7 @@ export function useTauriEvents(deps: { openTableTarget: (target: NavigationTarge
             }
             focusCurrentWindow();
           } catch (e) {
-            console.error("[PanDB] mcp-open-table error:", e);
+            console.error("[Arch-GPT DB] mcp-open-table error:", e);
           }
         }).then((unlisten) => unlistenHandles.push(unlisten));
 
@@ -44,7 +50,7 @@ export function useTauriEvents(deps: { openTableTarget: (target: NavigationTarge
           try {
             await connectionStore.initFromDisk();
           } catch (e) {
-            console.error("[PanDB] mcp-reload-connections error:", e);
+            console.error("[Arch-GPT DB] mcp-reload-connections error:", e);
           }
         }).then((unlisten) => unlistenHandles.push(unlisten));
 
@@ -63,7 +69,7 @@ export function useTauriEvents(deps: { openTableTarget: (target: NavigationTarge
             queryStore.showExecutedQueryResults(connection_id, database, sql, results);
             focusCurrentWindow();
           } catch (e) {
-            console.error("[PanDB] mcp-execute-query error:", e);
+            console.error("[Arch-GPT DB] mcp-execute-query error:", e);
           }
         }).then((unlisten) => unlistenHandles.push(unlisten));
 
@@ -74,7 +80,7 @@ export function useTauriEvents(deps: { openTableTarget: (target: NavigationTarge
             }
             focusCurrentWindow();
           } catch (e) {
-            console.error("[PanDB] dbx-open-sql-files error:", e);
+            console.error("[Arch-GPT DB] dbx-open-sql-files error:", e);
           }
         }).then((unlisten) => unlistenHandles.push(unlisten));
 
@@ -85,7 +91,7 @@ export function useTauriEvents(deps: { openTableTarget: (target: NavigationTarge
             }
             focusCurrentWindow();
           } catch (e) {
-            console.error("[PanDB] dbx-open-db-files error:", e);
+            console.error("[Arch-GPT DB] dbx-open-db-files error:", e);
           }
         }).then((unlisten) => unlistenHandles.push(unlisten));
 
@@ -96,7 +102,18 @@ export function useTauriEvents(deps: { openTableTarget: (target: NavigationTarge
             }
             focusCurrentWindow();
           } catch (e) {
-            console.error("[PanDB] dbx-open-connection-links error:", e);
+            console.error("[Arch-GPT DB] dbx-open-connection-links error:", e);
+          }
+        }).then((unlisten) => unlistenHandles.push(unlisten));
+
+        listen<string[]>("dbx-open-ai-config-links", async (event) => {
+          try {
+            for (const url of event.payload) {
+              await deps.openAiConfigDeepLink(url);
+            }
+            focusCurrentWindow();
+          } catch (e) {
+            console.error("[DBX] dbx-open-ai-config-links error:", e);
           }
         }).then((unlisten) => unlistenHandles.push(unlisten));
       })

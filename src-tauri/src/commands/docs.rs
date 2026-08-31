@@ -8,7 +8,7 @@ use dbx_core::connection::AppState;
 use dbx_core::docs::annotations::{
     apply_annotations, load_annotations, resolve_notes_path, save_annotations, AnnotationFile,
 };
-use dbx_core::docs::{collect_snapshot, CollectOptions, SchemaSnapshot};
+use dbx_core::docs::{collect_snapshot, to_standalone_html, CollectOptions, SchemaSnapshot};
 use dbx_core::models::connection::ConnectionConfig;
 use tauri::State;
 
@@ -17,9 +17,9 @@ async fn connection_of(state: &Arc<AppState>, connection_id: &str) -> Result<Con
     configs.get(connection_id).cloned().ok_or_else(|| format!("Connection {connection_id} not found."))
 }
 
-/// The notes file for a connection, resolved against PanDB's data directory.
+/// The notes file for a connection, resolved against Arch-GPT DB's data directory.
 ///
-/// `AppState.storage.data_dir()` is the directory PanDB is actually using — it
+/// `AppState.storage.data_dir()` is the directory Arch-GPT DB is actually using — it
 /// honours a custom data dir, which a fresh `app_data_dir()` lookup would not.
 /// (`dbx-mcp::paths::app_data_dir()` is NOT available here: src-tauri does not
 /// depend on dbx-mcp.)
@@ -80,4 +80,15 @@ pub async fn docs_save_annotations(
 ) -> Result<(), String> {
     let path = notes_path_of(&state, &connection_id).await?;
     save_annotations(&path, &annotations)
+}
+
+#[tauri::command]
+pub async fn docs_export_html(
+    file_path: String,
+    snapshot: SchemaSnapshot,
+    annotations: AnnotationFile,
+    lang: String,
+) -> Result<(), String> {
+    let html = to_standalone_html(&snapshot, &annotations, &lang)?;
+    std::fs::write(&file_path, html).map_err(|error| format!("Failed to write {file_path}: {error}"))
 }

@@ -78,7 +78,7 @@ function installWindow() {
 
 beforeEach(() => {
   vi.useFakeTimers();
-  webdavSyncUploadMock.mockResolvedValue({ bytes: 42, remotePath: "PanDB/sync/snapshot.json" });
+  webdavSyncUploadMock.mockResolvedValue({ bytes: 42, remotePath: "Arch-GPT DB/sync/snapshot.json" });
   restoreLocalStorage = installLocalStorage();
   restoreWindow = installWindow();
   setActivePinia(createPinia());
@@ -106,7 +106,7 @@ test("reads normalized WebDAV auto-upload config from localStorage", () => {
   assert.deepEqual(config.webDavConfig, {
     endpoint: "https://dav.example.com/",
     username: "alice",
-    remotePath: "PanDB/sync/snapshot.json",
+    remotePath: "Arch-GPT DB/sync/snapshot.json",
   });
 });
 
@@ -123,7 +123,7 @@ test("keeps WebDAV auto-upload running outside the settings dialog", async () =>
   assert.deepEqual(webdavSyncUploadMock.mock.calls[0][0], {
     endpoint: "https://dav.example.com/",
     username: undefined,
-    remotePath: "PanDB/sync/snapshot.json",
+    remotePath: "Arch-GPT DB/sync/snapshot.json",
   });
 
   localStorage.setItem("dbx-webdav-auto-upload-enabled", "false");

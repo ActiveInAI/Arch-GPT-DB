@@ -15,7 +15,7 @@ pub fn hide_std_console_window(command: &mut std::process::Command) {
     #[cfg(windows)]
     {
         use std::os::windows::process::CommandExt;
-        // PanDB is a GUI app; console subprocesses should not flash a window.
+        // Arch-GPT DB is a GUI app; console subprocesses should not flash a window.
         command.creation_flags(CREATE_NO_WINDOW);
     }
 }

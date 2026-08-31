@@ -33,7 +33,7 @@ const channels = [
   {
     id: "github",
     color: "#f0f0f0",
-    href: "https://github.com/ActiveInAI/PanDB/discussions",
+    href: "https://github.com/ActiveInAI/Arch-GPT DB/discussions",
     icon: (
       <svg width={24} height={24} viewBox="0 0 24 24" fill="currentColor">
         <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
@@ -45,7 +45,7 @@ const channels = [
 const i18n = {
   en: {
     title: "Community",
-    desc: "Join the PanDB community — ask questions, share feedback, and connect with other users.",
+    desc: "Join the Arch-GPT DB community — ask questions, share feedback, and connect with other users.",
     discord: { name: "Discord", desc: "Real-time chat, Q&A, and feature discussions." },
     qq: { name: "QQ Group", desc: "Group number: 1087880322" },
     wechat: { name: "WeChat Group", desc: "Join via Tencent Docs invite link." },
@@ -53,7 +53,7 @@ const i18n = {
   },
   cn: {
     title: "交流群",
-    desc: "加入 PanDB 社区 — 提问、反馈、与其他用户交流。",
+    desc: "加入 Arch-GPT DB 社区 — 提问、反馈、与其他用户交流。",
     discord: { name: "Discord", desc: "实时聊天、问答和功能讨论。" },
     qq: { name: "QQ 群", desc: "群号：1087880322" },
     wechat: { name: "微信群", desc: "通过腾讯文档链接加入。" },
@@ -80,7 +80,7 @@ export default async function CommunityPage({ params }: { params: Promise<{ lang
   const t = i18n[l];
 
   return (
-    <main className="min-h-screen bg-[#0b1120] text-landing-ink">
+    <main className="min-h-screen bg-[#08080a] text-landing-ink">
       <LandingNav lang={l} active="community" />
 
       <div className="max-w-[860px] mx-auto px-6 pt-32 pb-4 max-[760px]:px-[18px] max-[760px]:pt-28">
@@ -93,7 +93,7 @@ export default async function CommunityPage({ params }: { params: Promise<{ lang
           {channels.map((ch) => {
             const meta = t[ch.id as keyof typeof t] as { name: string; desc: string };
             return (
-              <a key={ch.id} href={ch.href} target="_blank" rel="noopener noreferrer" className="group flex items-center gap-5 rounded-xl border border-landing-line bg-landing-panel px-6 py-5 transition-colors hover:border-[rgba(155,176,205,0.32)]">
+              <a key={ch.id} href={ch.href} target="_blank" rel="noopener noreferrer" className="group flex items-center gap-5 rounded-xl border border-landing-line bg-landing-panel px-6 py-5 transition-colors hover:border-[rgba(173,176,182,0.32)]">
                 <span className="grid place-items-center w-11 h-11 rounded-lg shrink-0" style={{ backgroundColor: `${ch.color}18`, color: ch.color }}>
                   {ch.icon}
                 </span>

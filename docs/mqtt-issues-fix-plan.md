@@ -2,16 +2,16 @@
 
 关联 issue：
 
-- [#5471](https://github.com/ActiveInAI/PanDB/issues/5471)：JSON 发布面板消失、重新打开后 Topic 丢失（P0）
-- [#5490](https://github.com/ActiveInAI/PanDB/issues/5490)：断线后 Topic 丢失、缺少 SSL 证书登录（P0）
-- [#5450](https://github.com/ActiveInAI/PanDB/issues/5450)：Payload 切换为 JSON 后发送框消失（P0）
-- [#5448](https://github.com/ActiveInAI/PanDB/issues/5448)：禁止 MQTT 本地转发、消息分区展示（P1）
-- [#5456](https://github.com/ActiveInAI/PanDB/issues/5456)：保存 Topic 配置（P1）
+- [#5471](https://github.com/ActiveInAI/Arch-GPT DB/issues/5471)：JSON 发布面板消失、重新打开后 Topic 丢失（P0）
+- [#5490](https://github.com/ActiveInAI/Arch-GPT DB/issues/5490)：断线后 Topic 丢失、缺少 SSL 证书登录（P0）
+- [#5450](https://github.com/ActiveInAI/Arch-GPT DB/issues/5450)：Payload 切换为 JSON 后发送框消失（P0）
+- [#5448](https://github.com/ActiveInAI/Arch-GPT DB/issues/5448)：禁止 MQTT 本地转发、消息分区展示（P1）
+- [#5456](https://github.com/ActiveInAI/Arch-GPT DB/issues/5456)：保存 Topic 配置（P1）
 
 ## 现状与根因
 
 1. JSON placeholder 中包含原始 `{...}`，切换 JSON 时会被 Vue I18n 当作插值表达式编译，导致发布组件渲染异常。
-2. MQTT Topic 目前只保存在 `MqttClient` 的进程内存中；同一客户端的网络重连可以恢复，但重建客户端或重启 PanDB 后会丢失。
+2. MQTT Topic 目前只保存在 `MqttClient` 的进程内存中；同一客户端的网络重连可以恢复，但重建客户端或重启 Arch-GPT DB 后会丢失。
 3. `MqttAuth` 已声明 `certificate` 类型，但连接 UI 只提供无认证和账号密码，Rust TLS 构建也只应用账号密码。
 4. 消息已经携带 `sent/received` 方向，但订阅请求没有 MQTT 5 `No Local` 选项，因此发布到自己订阅的 Topic 时会看到 broker 回送副本。
 
@@ -45,7 +45,7 @@
 ## 验收标准
 
 - 选择 JSON 后发布面板不消失，合法 JSON 可发布，非法 JSON 有错误提示。
-- 断线重连、关闭并重新打开 PanDB 后，已保存 Topic、QoS 和选项自动恢复。
+- 断线重连、关闭并重新打开 Arch-GPT DB 后，已保存 Topic、QoS 和选项自动恢复。
 - TLS、CA、自签 CA、客户端证书认证均可连接，错误证书给出明确错误。
 - MQTT 5 开启 No Local 后不出现自己的 broker 回送副本；关闭后发送和接收消息仍能按方向区分。
 

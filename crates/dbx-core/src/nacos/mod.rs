@@ -6,10 +6,12 @@
 //! still supports an older Rust toolchain. A future SDK adapter can implement
 //! the same port without changing commands, routes, or frontend contracts.
 
+pub mod access_control;
 pub mod archive;
 pub mod batch;
 pub mod config;
 pub mod http;
+pub mod namespace_access;
 pub mod port;
 mod prometheus;
 pub mod search;
@@ -38,7 +40,7 @@ type NacosAdminEntry = (NacosAdminConfig, Arc<dyn NacosAdmin>);
 /// exclude unrelated Nacos settings such as namespace and page size, so those
 /// edits do not force users through another CAPTCHA challenge.
 ///
-/// This is also the cache key rather than the PanDB connection ID: one r-nacos
+/// This is also the cache key rather than the Arch-GPT DB connection ID: one r-nacos
 /// console session authorizes every configuration in the same instance, even
 /// when the UI reaches it through a different connection context.
 #[derive(Clone, PartialEq, Eq, Hash)]
@@ -116,6 +118,8 @@ impl NacosAdminRegistry {
     pub async fn drop_connection(&self, connection_id: &str) {
         self.instances.write().await.remove(connection_id);
         self.build_locks.write().await.remove(connection_id);
+        access_control::invalidate_operations(connection_id);
+        namespace_access::invalidate(connection_id);
     }
 
     async fn rnacos_console_session(&self, cfg: &NacosAdminConfig) -> RNacosConsoleSessionHandle {
@@ -129,7 +133,7 @@ impl NacosAdminRegistry {
             return entry.session.clone();
         }
         let session = new_rnacos_console_session();
-        // Bound cache retention even when a user removes every matching PanDB
+        // Bound cache retention even when a user removes every matching Arch-GPT DB
         // connection. Tokens expire independently inside the session; this
         // entry is retained for one additional token lifetime to allow reuse.
         sessions.insert(
@@ -172,10 +176,12 @@ mod tests {
         NacosAdminConfig {
             implementation: Some(NacosImplementation::RNacos),
             version_mode: None,
+            api_plane: None,
             server_addr: "http://127.0.0.1:8848".to_string(),
             display_server_addr: "http://127.0.0.1:8848".to_string(),
             namespace: "public".to_string(),
             context_path: "/nacos".to_string(),
+            managed_namespaces: Vec::new(),
             rnacos_console_addr: "http://127.0.0.1:10848".to_string(),
             rnacos_history_enabled: Some(true),
             rnacos_console_auth: NacosRNacosConsoleAuth::UsernamePassword {

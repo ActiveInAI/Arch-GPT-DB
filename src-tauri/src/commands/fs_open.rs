@@ -100,7 +100,7 @@ fn validate_database_backup_file(raw: &str) -> Result<PathBuf, String> {
     }
     let file_name = path.file_name().and_then(|name| name.to_str()).unwrap_or_default();
     if !file_name.starts_with("dbx-backup__") {
-        return Err(format!("backup file name is not managed by PanDB: {expanded}"));
+        return Err(format!("backup file name is not managed by Arch-GPT DB: {expanded}"));
     }
     Ok(path)
 }

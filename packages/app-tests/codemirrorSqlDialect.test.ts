@@ -39,7 +39,7 @@ test("keeps generic JDBC on Standard SQL without the ASE editor override", () =>
   assert.equal(countParsedNodes(dialect, "SELECT top 1 * FROM wfAdmin AS wa", "Keyword", "top"), 0);
 });
 
-test("keeps PanDB PostgreSQL procedural dialect extensions", () => {
+test("keeps Arch-GPT DB PostgreSQL procedural dialect extensions", () => {
   const dialect = createDbxCodeMirrorSqlDialect(langSql, "postgres");
 
   assert.equal(hasKeyword(dialect.spec.keywords, "PERFORM"), true);

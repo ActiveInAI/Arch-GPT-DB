@@ -16,15 +16,15 @@ const i18n = {
     organizationPlaceholder: "Company, team, or community",
     supportTypeLabel: "Support type",
     supportTypes: ["Financial sponsorship", "Infrastructure or services", "Developer tools", "Community collaboration", "Other"],
-    messageLabel: "How would you like to support PanDB?",
+    messageLabel: "How would you like to support Arch-GPT DB?",
     messagePlaceholder: "Share your idea, available resources, expected timeline, and anything else that helps us understand the proposal.",
     submit: "Continue in email",
-    privacy: "This opens your email app with the message prepared. PanDB does not store the form content on this website.",
+    privacy: "This opens your email app with the message prepared. Arch-GPT DB does not store the form content on this website.",
     alternatives: "Other ways to reach us",
     qq: "QQ: 86554840",
-    subject: "PanDB sponsorship inquiry",
+    subject: "Arch-GPT DB sponsorship inquiry",
     emailBody: {
-      greeting: "Hello PanDB team,",
+      greeting: "Hello Arch-GPT DB team,",
       name: "Name",
       email: "Email",
       organization: "Organization",
@@ -43,15 +43,15 @@ const i18n = {
     organizationPlaceholder: "公司、团队或社区名称",
     supportTypeLabel: "支持方式",
     supportTypes: ["资金赞助", "基础设施或服务资源", "开发工具", "社区合作", "其他"],
-    messageLabel: "你希望如何支持 PanDB？",
+    messageLabel: "你希望如何支持 Arch-GPT DB？",
     messagePlaceholder: "可以介绍合作想法、可提供的资源、预期时间，以及其他便于我们了解方案的信息。",
     submit: "用邮箱发送",
-    privacy: "点击后会打开你的邮件客户端并预填内容，PanDB 不会在本站保存这些表单信息。",
+    privacy: "点击后会打开你的邮件客户端并预填内容，Arch-GPT DB 不会在本站保存这些表单信息。",
     alternatives: "其他联系方式",
     qq: "QQ：86554840",
-    subject: "PanDB 赞助合作咨询",
+    subject: "Arch-GPT DB 赞助合作咨询",
     emailBody: {
-      greeting: "你好，PanDB 团队：",
+      greeting: "你好，Arch-GPT DB 团队：",
       name: "姓名",
       email: "电子邮箱",
       organization: "公司或团队",
@@ -88,7 +88,7 @@ export function SponsorContactForm({ lang }: { lang: "en" | "cn" }) {
   }
 
   const fieldClassName =
-    "mt-2 min-h-11 w-full rounded-lg border border-landing-line bg-[#0d1422] px-3.5 text-sm text-landing-ink outline-none transition placeholder:text-[#65758b] focus:border-[#6ea8ff]/70 focus:ring-2 focus:ring-[#6ea8ff]/15";
+    "mt-2 min-h-11 w-full rounded-lg border border-landing-line bg-[#0e0f13] px-3.5 text-sm text-landing-ink outline-none transition placeholder:text-[#6b7078] focus:border-[#6ea8ff]/70 focus:ring-2 focus:ring-[#6ea8ff]/15";
 
   return (
     <form onSubmit={handleSubmit} className="grid gap-5" aria-label={t.subject}>
@@ -129,7 +129,7 @@ export function SponsorContactForm({ lang }: { lang: "en" | "cn" }) {
         <p className="max-w-[440px] text-xs leading-relaxed text-landing-muted">{t.privacy}</p>
         <button
           type="submit"
-          className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-lg bg-[#f2f7ff] px-5 text-sm font-[720] text-[#0b1120] transition hover:-translate-y-0.5 hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-landing-sky"
+          className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-lg bg-[#f0f1f4] px-5 text-sm font-[720] text-[#0a0b0e] transition hover:-translate-y-0.5 hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-landing-sky"
         >
           <Send aria-hidden="true" size={16} strokeWidth={2.2} />
           {t.submit}

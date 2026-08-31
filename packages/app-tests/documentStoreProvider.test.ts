@@ -374,7 +374,7 @@ test("offers Elasticsearch query types based on mapping field type", () => {
 });
 
 test("builds wildcard queries compatible with Elasticsearch 7.x", () => {
-  assert.deepEqual(buildElasticsearchQueryFromRules([rule({ fieldName: "sku", rawValue: "PanDB-*", elasticsearchQueryType: "wildcard" })]), {
-    bool: { filter: [{ wildcard: { sku: "PanDB-*" } }] },
+  assert.deepEqual(buildElasticsearchQueryFromRules([rule({ fieldName: "sku", rawValue: "Arch-GPT DB-*", elasticsearchQueryType: "wildcard" })]), {
+    bool: { filter: [{ wildcard: { sku: "Arch-GPT DB-*" } }] },
   });
 });

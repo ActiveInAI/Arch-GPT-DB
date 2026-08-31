@@ -3,7 +3,7 @@ title: SQL Formatting
 description: Format a selection or the full editor with database-aware syntax, then manage the current formatter options and JSON config.
 ---
 
-PanDB chooses a formatter dialect from the active connection and writes the result back to the query editor. When text is selected, only that range is formatted; otherwise PanDB formats the entire editor.
+Arch-GPT DB chooses a formatter dialect from the active connection and writes the result back to the query editor. When text is selected, only that range is formatted; otherwise Arch-GPT DB formats the entire editor.
 
 Use the **Format SQL** toolbar button or the configurable formatting command documented under [Keyboard Shortcuts](/en/docs/keyboard-shortcuts).
 
@@ -13,12 +13,12 @@ Use the **Format SQL** toolbar button or the configurable formatting command doc
 
 ## Dialect Selection
 
-PanDB currently uses dedicated formatter grammars for:
+Arch-GPT DB currently uses dedicated formatter grammars for:
 
 | Connection type | Formatter dialect |
 | --- | --- |
 | MySQL | MySQL |
-| PostgreSQL, openGauss, GaussDB, KingBase, Redshift, and related profiles | PostgreSQL |
+| PostgreSQL, openGauss, GaussDB, KingbaseES, Redshift, and related profiles | PostgreSQL |
 | SQLite, Turso, rqlite, and Cloudflare D1 | SQLite |
 | SQL Server | Transact-SQL |
 | ClickHouse | ClickHouse |
@@ -43,7 +43,7 @@ Open **Settings → SQL Formatter**. Form mode exposes:
 | Newline before semicolon | Places a statement-ending semicolon on a new line |
 | Parameter types | Recognizes positional, numbered, named, quoted, or custom-regex parameters |
 
-**Restore Defaults** restores the formatter settings defined by the current PanDB build. Click **Apply** in the settings dialog to persist changes.
+**Restore Defaults** restores the formatter settings defined by the current Arch-GPT DB build. Click **Apply** in the settings dialog to persist changes.
 
 ## JSON Mode and Import / Export
 
@@ -71,7 +71,7 @@ JSON mode is useful for exact editing, copying, or moving formatter settings. Th
 }
 ```
 
-The JSON editor validates the draft continuously. PanDB blocks apply or import when:
+The JSON editor validates the draft continuously. Arch-GPT DB blocks apply or import when:
 
 - the text is not valid JSON;
 - `version` is not `1`;
@@ -79,7 +79,7 @@ The JSON editor validates the draft continuously. PanDB blocks apply or import w
 - `options` contains an unknown field; or
 - a value is outside the range accepted by the current build.
 
-**Export Config** downloads `dbx-sql-formatter.json`. Import replaces only SQL formatter options; it does not change connections, editor shortcuts, or other PanDB settings. Use [Configuration Cloud Sync](/en/docs/cloud-sync) when you need a broader settings migration.
+**Export Config** downloads `dbx-sql-formatter.json`. Import replaces only SQL formatter options; it does not change connections, editor shortcuts, or other Arch-GPT DB settings. Use [Configuration Cloud Sync](/en/docs/cloud-sync) when you need a broader settings migration.
 
 ## Parameter Recognition
 
@@ -101,7 +101,7 @@ Set `paramTypes` to `null` to use the formatter defaults. Configure additional p
 - `named` and `quoted` accept only `:`, `@`, and `$`.
 - Each `custom` item may contain only a non-empty, valid `regex`.
 
-PanDB always adds recognition for `${name}` and `#{name}` variables so those templates do not cause formatter parse failures. A non-null legacy `params` option is no longer used for text substitution; configure `paramTypes` instead.
+Arch-GPT DB always adds recognition for `${name}` and `#{name}` variables so those templates do not cause formatter parse failures. A non-null legacy `params` option is no longer used for text substitution; configure `paramTypes` instead.
 
 <Cards>
   <Card title="Query Editor" href="/en/docs/query-editor">

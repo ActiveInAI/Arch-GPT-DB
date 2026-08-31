@@ -1,3 +1,5 @@
+#![recursion_limit = "256"]
+
 pub mod agent_catalog;
 pub mod agent_connection;
 pub mod agent_events;
@@ -5,6 +7,7 @@ pub mod agent_explain;
 pub mod agent_kv;
 pub mod agent_loop;
 pub mod agent_manager;
+pub mod agent_offline_export;
 pub mod agent_recovery;
 pub mod agent_runtime;
 pub mod agent_service;
@@ -12,16 +15,22 @@ pub mod agent_tools;
 pub mod ai;
 pub mod ai_claude_code_cli;
 pub mod ai_cli_agent;
+pub mod ai_codebuddy_cli;
 pub mod ai_codex_cli;
+pub mod ai_cursor_cli;
 pub mod ai_effort;
+pub mod ai_grok_cli;
 mod ai_model_filter;
+pub mod ai_opencode_cli;
 pub mod ai_pi_agent_cli;
+pub mod ai_qoder_cli;
 pub mod backend_error;
 pub mod changelog;
 pub mod cloud_sync;
 pub mod config;
 pub mod connection;
 pub mod connection_secrets;
+pub mod consul;
 pub mod correction;
 pub mod csv_export;
 pub mod data_compare;
@@ -29,6 +38,7 @@ pub mod data_grid_extractors;
 pub mod data_grid_sql;
 pub mod database_capabilities;
 pub mod database_export;
+pub mod database_manifest;
 pub mod database_search_sql;
 pub mod db;
 pub mod db_admin_sql;
@@ -41,6 +51,7 @@ pub mod hbase_ops;
 pub mod history;
 pub mod jdbc;
 pub mod models;
+pub mod mongo_oidc;
 pub mod mongo_ops;
 pub mod mongo_shell;
 #[cfg(feature = "mq-admin")]
@@ -48,6 +59,7 @@ pub mod mq;
 #[cfg(feature = "mq-admin")]
 pub mod mqtt;
 pub(crate) mod mysql_ddl_normalize;
+pub mod mysql_event_sql;
 pub mod nacos;
 #[cfg(all(target_os = "windows", target_env = "gnu"))]
 mod nanosleep_stub;
@@ -64,10 +76,12 @@ pub mod query_result_export;
 pub mod query_result_sql;
 pub mod redis_ops;
 pub mod risk_metrics;
+pub mod runtime_config;
 pub mod saved_sql;
 pub mod schema;
 pub mod schema_diff;
 pub mod script_generator;
+pub mod session_credentials;
 pub mod sql;
 pub mod sql_analysis;
 pub mod sql_diagnostics;
@@ -92,10 +106,11 @@ pub mod transfer;
 pub mod two_phase_commit;
 pub mod types;
 pub mod update;
+pub mod write_unlock;
 pub mod xlsx_export;
 
-/// Maps Arch-GPT DB configuration onto the PanDB-compatible runtime names used by
-/// the shared core. Existing PanDB values always win, so an explicit upstream
+/// Maps Arch-GPT DB configuration onto the Arch-GPT DB-compatible runtime names used by
+/// the shared core. Existing Arch-GPT DB values always win, so an explicit upstream
 /// integration remains possible without contaminating the Arch-GPT DB default.
 pub fn install_arch_gpt_db_environment_aliases() {
     const ALIASES: &[&str] = &[
@@ -126,7 +141,7 @@ pub fn install_arch_gpt_db_environment_aliases() {
     }
 }
 
-/// Makes PanDB-prefixed runtime configuration available to legacy DBX readers without
+/// Makes Arch-GPT DB-prefixed runtime configuration available to legacy DBX readers without
 /// overwriting an explicitly supplied legacy value. Call this once at process startup.
 pub fn install_pandb_environment_aliases() {
     const ALIASES: &[&str] = &[
@@ -157,8 +172,8 @@ pub fn install_pandb_environment_aliases() {
     }
 }
 
-pub const R2_CDN_BASE: &str = "https://dl.dbxio.com/";
-pub const GITHUB_RELEASE_DOWNLOAD_PREFIX: &str = "https://github.com/ActiveInAI/PanDB/releases/download/";
+pub const R2_CDN_BASE: &str = "https://github.com/ActiveInAI/Arch-GPT-DB/releases/latest/download/";
+pub const GITHUB_RELEASE_DOWNLOAD_PREFIX: &str = "https://github.com/ActiveInAI/Arch-GPT-DB/releases/download/";
 pub const CNB_RELEASE_DOWNLOAD_PREFIX: &str = "https://cnb.cool/dbxio.com/dbx/-/releases/download/";
 
 #[derive(Clone, Copy, Debug, Default, serde::Deserialize, PartialEq, Eq, Hash)]
@@ -192,7 +207,7 @@ fn rewrite_github_release_url(url: &str, target_prefix: &str) -> Result<String, 
     }
     url.strip_prefix(GITHUB_RELEASE_DOWNLOAD_PREFIX)
         .map(|path| format!("{target_prefix}{path}"))
-        .ok_or_else(|| format!("Unsupported PanDB release download URL: {url}"))
+        .ok_or_else(|| format!("Unsupported Arch-GPT DB release download URL: {url}"))
 }
 
 pub fn download_candidate_urls(github_url: &str, r2_path: &str) -> Vec<String> {
@@ -250,7 +265,7 @@ mod tests {
     #[test]
     fn download_candidates_exclude_third_party_github_proxy() {
         let urls = download_candidate_urls(
-            "https://github.com/ActiveInAI/PanDB/releases/latest/download/latest.json",
+            "https://github.com/ActiveInAI/Arch-GPT-DB/releases/latest/download/latest.json",
             "releases/latest/latest.json",
         );
 
@@ -258,14 +273,14 @@ mod tests {
             urls,
             vec![
                 "https://dl.dbxio.com/releases/latest/latest.json",
-                "https://github.com/ActiveInAI/PanDB/releases/latest/download/latest.json",
+                "https://github.com/ActiveInAI/Arch-GPT-DB/releases/latest/download/latest.json",
             ]
         );
     }
 
     #[test]
     fn mirror_download_candidates_prefer_selected_source() {
-        let github_url = "https://github.com/ActiveInAI/PanDB/releases/download/agents-latest/agent-registry.json";
+        let github_url = "https://github.com/ActiveInAI/Arch-GPT-DB/releases/download/agents-latest/agent-registry.json";
         assert_eq!(
             DownloadSource::Cnb.download_candidate_urls(github_url, "agents/agent-registry.json").unwrap(),
             vec![

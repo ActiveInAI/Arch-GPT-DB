@@ -1,5 +1,5 @@
 function storageWarn(action: string, key: string, error: unknown) {
-  console.warn(`[PanDB][storage:${action}] ${key}`, error);
+  console.warn(`[Arch-GPT DB][storage:${action}] ${key}`, error);
 }
 
 export function safeLocalStorageGet(key: string): string | null {
@@ -11,11 +11,15 @@ export function safeLocalStorageGet(key: string): string | null {
   }
 }
 
-export function safeLocalStorageSet(key: string, value: string) {
+export function safeLocalStorageSet(key: string, value: string): boolean {
   try {
-    globalThis.localStorage?.setItem(key, value);
+    const storage = globalThis.localStorage;
+    if (!storage) return false;
+    storage.setItem(key, value);
+    return true;
   } catch (error) {
     storageWarn("set", key, error);
+    return false;
   }
 }
 

@@ -3,7 +3,7 @@ import { test } from "vitest";
 import { sortContributorActivity, type ContributorActivityData } from "./contributorActivity";
 
 const data: ContributorActivityData = {
-  repository: "ActiveInAI/PanDB",
+  repository: "ActiveInAI/Arch-GPT DB",
   generatedAt: "2026-07-19T00:00:00.000Z",
   stars: 100,
   contributors: [

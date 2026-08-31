@@ -33,13 +33,13 @@ export function useWebDavAutoUpload() {
     uploading = true;
     try {
       const summary = await webdavSyncUpload(config.webDavConfig, settingsStore.editorSettings);
-      appendDebugLog("info", "[PanDB][webdav:auto-upload:success]", {
+      appendDebugLog("info", "[Arch-GPT DB][webdav:auto-upload:success]", {
         bytes: summary.bytes,
         remotePath: summary.remotePath,
         exportedAt: summary.exportedAt,
       });
     } catch (error) {
-      appendDebugLog("error", "[PanDB][webdav:auto-upload:error]", error);
+      appendDebugLog("error", "[Arch-GPT DB][webdav:auto-upload:error]", error);
     } finally {
       uploading = false;
     }

@@ -1,12 +1,12 @@
 ---
 title: Build From Source and Contribute
-description: Set up PanDB from scratch, run the desktop app, make your first change, test it, and open a pull request.
+description: Set up Arch-GPT DB from scratch, run the desktop app, make your first change, test it, and open a pull request.
 ---
 
-This tutorial is for first-time PanDB contributors. By the end, you will have:
+This tutorial is for first-time Arch-GPT DB contributors. By the end, you will have:
 
 1. Installed Node.js, pnpm, Rust, and native build dependencies
-2. Forked, cloned, and run PanDB Desktop
+2. Forked, cloned, and run Arch-GPT DB Desktop
 3. Located the relevant code and completed a small change
 4. Run checks and tests that match the change
 5. Pushed a branch and opened a pull request
@@ -17,7 +17,7 @@ This tutorial is for first-time PanDB contributors. By the end, you will have:
 
 ## 1. Choose and Claim an Issue
 
-Open [PanDB Issues](https://github.com/ActiveInAI/PanDB/issues) and choose an issue that has no assignee and no active contributor in its comments. Good first contributions have one of these properties:
+Open [Arch-GPT DB Issues](https://github.com/ActiveInAI/Arch-GPT DB/issues) and choose an issue that has no assignee and no active contributor in its comments. Good first contributions have one of these properties:
 
 - The reproduction steps and expected behavior are already clear
 - The scope is a small documentation, translation, or UI change
@@ -37,7 +37,7 @@ If you later cannot continue, post `/unclaim` as a standalone comment (`/unclaim
 
 ## 2. Install the Toolchain
 
-PanDB Desktop uses Tauri, Vue, and Rust. The repository currently requires:
+Arch-GPT DB Desktop uses Tauri, Vue, and Rust. The repository currently requires:
 
 | Tool | Version |
 | --- | --- |
@@ -45,7 +45,7 @@ PanDB Desktop uses Tauri, Vue, and Rust. The repository currently requires:
 | pnpm | 10.27.0 |
 | Rust | 1.88 or newer |
 | Git | Current stable version |
-| Make | Recommended on macOS and Linux |
+| Make | Required on macOS and Linux; optional on Windows |
 
 ### Install Node.js and pnpm
 
@@ -75,7 +75,7 @@ cargo --version
 
 ### Install Native Dependencies
 
-See the [official Tauri prerequisites](https://v2.tauri.app/start/prerequisites/) for complete platform details. PanDB also uses ODBC development libraries.
+See the [official Tauri prerequisites](https://v2.tauri.app/start/prerequisites/) for complete platform details. Arch-GPT DB also uses ODBC development libraries.
 
 <Tabs groupId="contributing-platform" items={["macOS", "Ubuntu / Debian", "Windows"]}>
   <Tab value="macOS">
@@ -106,7 +106,15 @@ See the [official Tauri prerequisites](https://v2.tauri.app/start/prerequisites/
     1. Install [Microsoft C++ Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/).
     2. Select **Desktop development with C++** in the installer.
     3. Make sure a Windows 10/11 SDK and WebView2 are installed. Windows 11 normally includes WebView2.
-    4. Run the Windows commands on this page in PowerShell.
+    4. Install [Strawberry Perl](https://github.com/StrawberryPerl/Perl-Dist-Strawberry/releases), required to build the bundled OpenSSL:
+
+        ```powershell
+        winget install StrawberryPerl.StrawberryPerl
+        ```
+
+        DBX enables the `sqlite-sqlcipher` feature by default, which compiles SQLCipher and OpenSSL from source. Windows needs Perl to run the OpenSSL `Configure` script. Reopen your terminal after installing so `perl` is available on `PATH`.
+
+    5. Run the Windows commands on this page in PowerShell.
 
     Make is optional on Windows because equivalent pnpm commands are provided below.
 
@@ -115,14 +123,14 @@ See the [official Tauri prerequisites](https://v2.tauri.app/start/prerequisites/
 
 ## 3. Fork and Clone the Repository
 
-Open [ActiveInAI/PanDB](https://github.com/ActiveInAI/PanDB) on GitHub and click **Fork**.
+Open [ActiveInAI/Arch-GPT DB](https://github.com/ActiveInAI/Arch-GPT DB) on GitHub and click **Fork**.
 
 Replace `<your-github-name>` with your account name:
 
 ```bash
 git clone https://github.com/<your-github-name>/dbx.git
 cd dbx
-git remote add upstream https://github.com/ActiveInAI/PanDB.git
+git remote add upstream https://github.com/ActiveInAI/Arch-GPT DB.git
 git remote -v
 ```
 
@@ -141,7 +149,7 @@ git rebase upstream/main
 git push origin main
 ```
 
-## 4. Run PanDB for the First Time
+## 4. Run Arch-GPT DB for the First Time
 
 ### macOS and Linux
 
@@ -153,13 +161,13 @@ make
 
 `make` installs dependencies from the lockfile and starts the Tauri desktop development environment. The first Rust build can take a while; later starts are much faster.
 
-For a lightweight desktop build, keep DuckDB sidecar support while skipping the other default Rust features:
+For a lightweight desktop build, disable the default Rust features and enable only the DuckDB sidecar, DynamoDB, and bundled SQLite:
 
 ```bash
 make dev-fast
 ```
 
-Development builds can run alongside an installed PanDB instance. Both use the same local PanDB data, so connections and history are available in each window. Avoid changing the same connection, saved SQL, or global setting in both windows at once.
+Development builds can run alongside an installed Arch-GPT DB instance. Both use the same local Arch-GPT DB data, so connections and history are available in each window. Avoid changing the same connection, saved SQL, or global setting in both windows at once.
 
 When testing the MCP bridge, the instance started last owns the shared `mcp-bridge-port` discovery file and receives MCP requests. Redis PubSub prefers port `4224` (or `DBX_PORT` when set) and automatically falls back to an available local port; the frontend uses the actual bound port.
 
@@ -175,18 +183,18 @@ pnpm dev:tauri
 For the same lightweight build:
 
 ```powershell
-pnpm tauri dev -- --no-default-features --features duckdb-sidecar
+pnpm tauri dev -- --no-default-features --features duckdb-sidecar,dynamodb,sqlite-bundled
 ```
 
 ### Confirm the Environment Works
 
-A successful run opens the PanDB desktop window without a compiler error in the terminal. Complete three quick checks:
+A successful run opens the Arch-GPT DB desktop window without a compiler error in the terminal. Complete three quick checks:
 
 1. Open Settings
 2. Create or open a local test connection
 3. Close and start the app again to confirm the setup is repeatable
 
-If port `1420` is already in use, stop the previous PanDB/Vite development process and restart.
+If port `1420` is already in use, stop the previous Arch-GPT DB/Vite development process and restart.
 
 ## Local database test environments
 
@@ -210,7 +218,7 @@ The service ports listen on `127.0.0.1` by default. Set `DB_BIND_ADDRESS=0.0.0.0
 | `crates/dbx-core/` | Connections, queries, metadata, and shared Rust database logic |
 | `crates/dbx-web/` | Docker/Web backend |
 | `packages/app-tests/` | Tests for shared frontend logic |
-| `packages/cli/` | PanDB CLI |
+| `packages/cli/` | Arch-GPT DB CLI |
 | `packages/mcp-server/` | MCP Server |
 | `docs/content/docs/` | Bilingual website documentation |
 | `agents/drivers/` | Java/JDBC and selected native database agents |
@@ -293,10 +301,10 @@ Database behavior changes should be verified against a real database, not only m
 
 ### Path D: Change an Agent Driver
 
-Agents are separate processes that communicate with PanDB through stdin/stdout JSON-RPC. Java/JDBC agents normally use JDK 21; native agents use Go or Rust. Read these first:
+Agents are separate processes that communicate with Arch-GPT DB through stdin/stdout JSON-RPC. Java/JDBC agents normally use JDK 21; native agents use Go or Rust. Read these first:
 
-- [`agents/README.md`](https://github.com/ActiveInAI/PanDB/blob/main/agents/README.md)
-- [`agents/docs/agent-authoring.md`](https://github.com/ActiveInAI/PanDB/blob/main/agents/docs/agent-authoring.md)
+- [`agents/README.md`](https://github.com/ActiveInAI/Arch-GPT DB/blob/main/agents/README.md)
+- [`agents/docs/agent-authoring.md`](https://github.com/ActiveInAI/Arch-GPT DB/blob/main/agents/docs/agent-authoring.md)
 
 #### Change an Existing Java/JDBC Agent
 
@@ -314,7 +322,7 @@ The Shadow JAR is written under:
 agents/drivers/<driver-module>/build/libs/
 ```
 
-A successful build does not mean the local PanDB app is using the new code. PanDB runs `.dbx/agents/drivers/<db_type>/agent.jar` under the user home directory, so back up and replace the runtime JAR:
+A successful build does not mean the local Arch-GPT DB app is using the new code. Arch-GPT DB runs `.dbx/agents/drivers/<db_type>/agent.jar` under the user home directory, so back up and replace the runtime JAR:
 
 <Tabs groupId="agent-runtime-replace" items={["macOS / Linux", "Windows PowerShell"]}>
   <Tab value="macOS / Linux">
@@ -335,7 +343,7 @@ A successful build does not mean the local PanDB app is using the new code. PanD
   </Tab>
 </Tabs>
 
-Restart PanDB or disconnect and reconnect the database so the old agent process exits and the new JAR is loaded. Repeat the issue's reproduction flow against the real database version.
+Restart Arch-GPT DB or disconnect and reconnect the database so the old agent process exits and the new JAR is loaded. Repeat the issue's reproduction flow against the real database version.
 
 #### When to Change `agents/versions.json`
 
@@ -419,7 +427,7 @@ Do not combine unrelated problems in the same commit or pull request.
 
 ## 9. Open a Pull Request
 
-Open your fork on GitHub and click **Compare & pull request**. Set the target repository to `ActiveInAI/PanDB` and the target branch to `main`.
+Open your fork on GitHub and click **Compare & pull request**. Set the target repository to `ActiveInAI/Arch-GPT DB` and the target branch to `main`.
 
 The pull request description should include:
 
@@ -460,7 +468,7 @@ git push --force-with-lease
 
 ### The First Rust Build Is Slow
 
-This is expected. Use `make dev-fast` for a lightweight desktop build that still supports DuckDB. `make cargo-check-fast` and `make cargo-test-fast` skip all optional default features, so they do not validate DuckDB-specific paths.
+This is expected. Use `make dev-fast` for a lightweight desktop build with default Rust features disabled and only the DuckDB sidecar and DynamoDB enabled. `make cargo-check-fast` and `make cargo-test-fast` skip all optional default features, so they do not validate DuckDB-specific paths.
 
 ### pnpm Reports the Wrong Version
 
@@ -482,6 +490,6 @@ Start with the minimum check for the changed directory, then perform the issue's
 
 - Describe the blocker in the original issue and include the complete error and operating system version
 - Join [Discord](https://discord.gg/W7NyVDRt6a)
-- Read the repository [CONTRIBUTING.md](https://github.com/ActiveInAI/PanDB/blob/main/CONTRIBUTING.md)
+- Read the repository [CONTRIBUTING.md](https://github.com/ActiveInAI/Arch-GPT DB/blob/main/CONTRIBUTING.md)
 
 Do not report only "the build failed." Include the command, the first meaningful error in the log, your operating system, and your Node.js, pnpm, and Rust versions.

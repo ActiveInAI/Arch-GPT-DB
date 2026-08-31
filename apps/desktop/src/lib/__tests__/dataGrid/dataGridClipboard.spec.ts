@@ -103,7 +103,7 @@ describe("planDataGridPaste", () => {
 });
 
 describe("parseDataGridClipboard", () => {
-  it("restores null values copied from the PanDB grid", () => {
+  it("restores null values copied from the Arch-GPT DB grid", () => {
     rememberDataGridClipboardCopy("NULL\tNULL", [[null, "NULL"]]);
 
     expect(parseDataGridClipboard("NULL\tNULL")).toEqual([[null, "NULL"]]);

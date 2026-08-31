@@ -62,7 +62,7 @@ onMounted(async () => {
       await connectionStore.ensureConnected(props.connectionId);
       nodes.value = await api.redisClusterMasterNodes(props.connectionId);
     } catch (e) {
-      console.warn("[PanDB] ensureConnected failed for", props.connectionId, e);
+      console.warn("[Arch-GPT DB] ensureConnected failed for", props.connectionId, e);
     }
   }
 });

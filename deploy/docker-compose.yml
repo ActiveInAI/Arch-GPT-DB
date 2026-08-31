@@ -7,7 +7,7 @@ services:
       - "4224:4224"
     environment:
       - DBX_PASSWORD=changeme
-      # Uncomment when publishing PanDB under a reverse-proxy subpath, e.g. https://example.com/dbx/
+      # Uncomment when publishing Arch-GPT DB under a reverse-proxy subpath, e.g. https://example.com/dbx/
       # - DBX_PUBLIC_BASE_PATH=/dbx
     volumes:
       - dbx-data:/app/data

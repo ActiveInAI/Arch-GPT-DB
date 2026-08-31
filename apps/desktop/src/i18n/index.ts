@@ -96,7 +96,7 @@ async function syncLocaleToBackend(locale: Locale) {
     const { invoke } = await import("@tauri-apps/api/core");
     await invoke("set_app_locale", { locale });
   } catch (error) {
-    console.warn("[PanDB][i18n] failed to sync locale to backend", error);
+    console.warn("[Arch-GPT DB][i18n] failed to sync locale to backend", error);
   }
 }
 

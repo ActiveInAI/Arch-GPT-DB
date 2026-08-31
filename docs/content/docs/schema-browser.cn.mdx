@@ -1,9 +1,9 @@
 ---
 title: 结构浏览与对象树
-description: 使用 PanDB 侧边栏组织连接、搜索数据库对象、打开数据与结构，并执行数据库专属操作。
+description: 使用 Arch-GPT DB 侧边栏组织连接、搜索数据库对象、打开数据与结构，并执行数据库专属操作。
 ---
 
-对象树是 PanDB 的主要导航入口。它不仅展示数据库、Schema、表和字段，还负责连接分组、可见范围、对象搜索、固定、复制粘贴、结构操作、专项工作台和管理视图。
+对象树是 Arch-GPT DB 的主要导航入口。它不仅展示数据库、Schema、表和字段，还负责连接分组、可见范围、对象搜索、固定、复制粘贴、结构操作、专项工作台和管理视图。
 
 ## 连接与对象层级
 
@@ -27,7 +27,7 @@ description: 使用 PanDB 侧边栏组织连接、搜索数据库对象、打开
 | Doris / StarRocks | 可在多 Catalog 时显示 Catalog → 数据库 → 表；只有 `internal` 时保持扁平 |
 | Redis | 连接 → Redis DB；Key 在专用浏览器中分页展示 |
 | MongoDB | 连接 → 数据库 → 集合、索引和 GridFS Bucket |
-| Elasticsearch / Easysearch | 连接 → 索引等文档对象 |
+| Elasticsearch / Easysearch / Meilisearch | 连接 → 索引等文档对象 |
 | HBase、向量、消息队列、etcd、ZooKeeper、Nacos | 展示系统对应对象，并打开 [专项工作台](/cn/docs/specialized-workspaces) |
 
 ## 连接分组与批量管理
@@ -39,7 +39,7 @@ description: 使用 PanDB 侧边栏组织连接、搜索数据库对象、打开
 - 复制连接名称或复制整个连接配置作为新连接
 - 在连接提示中查看主机、端口、数据库类型和其他摘要
 
-导入连接时，支持的来源可以保留分组信息。跨设备迁移侧边栏布局时，PanDB 会重新映射连接 ID。
+导入连接时，支持的来源可以保留分组信息。跨设备迁移侧边栏布局时，Arch-GPT DB 会重新映射连接 ID。
 
 ## 展开、折叠与固定
 
@@ -120,12 +120,12 @@ description: 使用 PanDB 侧边栏组织连接、搜索数据库对象、打开
 
 ## 数据库专属层级
 
-PanDB 不会把所有系统强制映射成关系型树。例如：
+Arch-GPT DB 不会把所有系统强制映射成关系型树。例如：
 
 - SQL Server 可以浏览 Linked Server 和数据库对象
 - Doris / StarRocks 支持外部 Catalog，外部 Catalog 表使用三段式名称
 - MongoDB 展示 Collection、索引和 GridFS
-- Elasticsearch / Easysearch 将索引作为一等对象
+- Elasticsearch / Easysearch / Meilisearch 将索引作为一等对象
 - 达梦、Oracle、PostgreSQL 等可以展示更多例程、任务、扩展或管理对象
 - etcd、Nacos、消息队列和向量数据库从树节点进入专用工作台
 

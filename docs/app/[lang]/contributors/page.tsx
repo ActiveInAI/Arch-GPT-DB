@@ -8,12 +8,12 @@ import { buildMetadata } from "@/lib/metadata";
 
 const pageMetadata = {
   en: {
-    title: "PanDB Contributors",
-    description: "Explore the people building PanDB and download a certificate generated from public GitHub activity.",
+    title: "Arch-GPT DB Contributors",
+    description: "Explore the people building Arch-GPT DB and download a certificate generated from public GitHub activity.",
   },
   cn: {
-    title: "PanDB 贡献者",
-    description: "查看共同建设 PanDB 的开源贡献者，并根据公开 GitHub 活动生成贡献证书。",
+    title: "Arch-GPT DB 贡献者",
+    description: "查看共同建设 Arch-GPT DB 的开源贡献者，并根据公开 GitHub 活动生成贡献证书。",
   },
 };
 
@@ -36,7 +36,7 @@ export default async function ContributorsPage({ params }: { params: Promise<{ l
   const data = contributorSnapshot as ContributorActivityData;
 
   return (
-    <main className="landing min-h-screen bg-[#061016]">
+    <main className="landing min-h-screen bg-[#08080a]">
       <LandingNav lang={locale} active="contributors" />
       <ContributorsExperience data={data} lang={locale} />
       <LandingFooter lang={locale} />

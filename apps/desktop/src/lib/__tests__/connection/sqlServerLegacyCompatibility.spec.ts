@@ -71,20 +71,20 @@ describe("SQL Server legacy compatibility", () => {
   });
 
   it("preserves semicolons and special characters inside braced values during migration", () => {
-    const config = connectionConfig("applicationName={PanDB; Client};password=50%;sqlserverEncryption=disabled;encrypt=false");
+    const config = connectionConfig("applicationName={Arch-GPT DB; Client};password=50%;sqlserverEncryption=disabled;encrypt=false");
 
     migrateSqlServerLegacyCompatibilityConfig(config);
 
     expect(config.driver_profile).toBe("sqlserver-legacy");
-    expect(config.url_params).toBe("applicationName={PanDB; Client};password=50%;encrypt=false");
+    expect(config.url_params).toBe("applicationName={Arch-GPT DB; Client};password=50%;encrypt=false");
   });
 
   it("keeps escaped closing braces from exposing separators inside braced values", () => {
-    const config = connectionConfig("applicationName={PanDB}}; Client};sqlserverEncryption=disabled;encrypt=false");
+    const config = connectionConfig("applicationName={Arch-GPT DB}}; Client};sqlserverEncryption=disabled;encrypt=false");
 
     migrateSqlServerLegacyCompatibilityConfig(config);
 
-    expect(config.url_params).toBe("applicationName={PanDB}}; Client};encrypt=false");
+    expect(config.url_params).toBe("applicationName={Arch-GPT DB}}; Client};encrypt=false");
   });
 
   it("keeps generic JDBC encrypt=false on the native driver", () => {

@@ -37,6 +37,7 @@ const STRUCTURED_BACKEND_ERROR_KEYS = [
   "backendErrors.jdbc.protocolFailed",
   "backendErrors.jdbc.contractInvalid",
   "backendErrors.jdbc.legacyFailure",
+  "backendErrors.transaction.sessionExpired",
   "backendErrors.legacy",
   "backendErrors.unknown",
 ] as const;
@@ -55,6 +56,22 @@ const WINDOWS_JRE_REMOVE_ERROR = [
 // Every backend message changed away from hardcoded Chinese, paired with the
 // key and params it must resolve to.
 const CASES: { name: string; message: string; key: string; params?: Record<string, string> }[] = [
+  {
+    name: "Nacos ordinary user must configure managed namespaces when namespace discovery is forbidden",
+    message: "Failed to list Nacos namespaces: NACOS_ERROR[v3ManagedNamespacesRequired]: access denied",
+    key: "nacos.nacosManagedNamespacesRequired",
+  },
+  {
+    name: "Nacos ordinary user must configure managed namespaces when authorization management is forbidden",
+    message: "NACOS_ERROR[managedNamespacesRequired]: 403 Forbidden",
+    key: "nacos.nacosManagedNamespacesRequired",
+  },
+  {
+    name: "Nacos 3 managed namespace permission check failed",
+    message: 'NACOS_ERROR[managedNamespaceAccessDenied]: One or more configured namespace IDs are not readable: namespace "team-a" naming: forbidden',
+    key: "nacos.nacosManagedNamespaceAccessDenied",
+    params: { detail: 'namespace "team-a" naming: forbidden' },
+  },
   {
     name: "Apache Phoenix JDBC driver missing",
     message: PHOENIX_DRIVER_NOT_INSTALLED_ERROR,
@@ -222,7 +239,7 @@ describe("backend error translation", () => {
     const t = translatorFor("zh-CN");
     const error = {
       version: 1,
-      code: "PanDB-JDBC-2002",
+      code: "Arch-GPT DB-JDBC-2002",
       messageKey: "backendErrors.jdbc.operationTimedOut",
       messageParams: { stage: "execute" },
       source: "jdbcAgent",
@@ -240,7 +257,7 @@ describe("backend error translation", () => {
     const t = translatorFor("zh-CN");
     const error = {
       version: 1,
-      code: "PanDB-JDBC-9001",
+      code: "Arch-GPT DB-JDBC-9001",
       messageKey: "backendErrors.jdbc.legacyFailure",
       messageParams: {},
       source: "jdbcAgentLegacy",
@@ -255,7 +272,7 @@ describe("backend error translation", () => {
     const t = translatorFor("en");
     const error = {
       version: 1,
-      code: "PanDB-JDBC-4001",
+      code: "Arch-GPT DB-JDBC-4001",
       messageKey: "backendErrors.jdbc.sqlFailed",
       messageParams: { stage: "execute" },
       source: "jdbcAgent",
@@ -273,7 +290,7 @@ describe("backend error translation", () => {
     const detail = 'driver: bad connection\nDBX_AGENT_ERROR_DATA:{"category":null,"agentSessionId":"session-1"}';
     const error = {
       version: 1,
-      code: "PanDB-JDBC-9001",
+      code: "Arch-GPT DB-JDBC-9001",
       messageKey: "backendErrors.jdbc.legacyFailure",
       messageParams: {},
       source: "jdbcAgentLegacy",
@@ -296,7 +313,7 @@ describe("backend error translation", () => {
     expect(
       normalizeBackendError({
         version: 1,
-        code: "PanDB-JDBC-2002",
+        code: "Arch-GPT DB-JDBC-2002",
         messageKey: "backendErrors.jdbc.operationTimedOut",
         messageParams: { stage: "execute" },
         source: "jdbcAgent",
@@ -309,7 +326,7 @@ describe("backend error translation", () => {
   test("accepts unknown compatibility sources and extensible origins", () => {
     const error = normalizeBackendError({
       version: 1,
-      code: "PanDB-DB-4001",
+      code: "Arch-GPT DB-DB-4001",
       messageKey: "backendErrors.jdbc.sqlFailed",
       messageParams: { stage: "execute" },
       source: "nativeDatabase",
@@ -324,14 +341,14 @@ describe("backend error translation", () => {
   test("falls back to legacy text for plain HTTP and Tauri failures", () => {
     const t = translatorFor("zh-CN");
     const error = new BackendErrorException("legacy backend failure");
-    expect(error.backendError.code).toBe("PanDB-LEGACY-0001");
+    expect(error.backendError.code).toBe("Arch-GPT DB-LEGACY-0001");
     expect(translateBackendError(t, error)).toBe(`${t("backendErrors.legacy")}\n\nlegacy backend failure`);
   });
 
   test("preserves JSON envelopes carried by strings and Error messages", () => {
     const envelope = {
       version: 1,
-      code: "PanDB-JDBC-4001",
+      code: "Arch-GPT DB-JDBC-4001",
       messageKey: "backendErrors.jdbc.sqlFailed",
       messageParams: { stage: "execute" },
       source: "jdbcAgent",
@@ -344,7 +361,7 @@ describe("backend error translation", () => {
 
   test("retains bounded diagnostics from unknown rejection objects", () => {
     const error = new BackendErrorException({ reason: "database worker returned a vendor diagnostic" });
-    expect(error.backendError.code).toBe("PanDB-LEGACY-0001");
+    expect(error.backendError.code).toBe("Arch-GPT DB-LEGACY-0001");
     expect(error.backendError.detail).toBe("database worker returned a vendor diagnostic");
     expect(new BackendErrorException({ reason: "x".repeat(70_000) }).backendError.detail).toHaveLength(64 * 1024);
   });
@@ -352,7 +369,7 @@ describe("backend error translation", () => {
   test("normalizes structured errors across Error realms and module copies", () => {
     const envelope = {
       version: 1,
-      code: "PanDB-JDBC-5001",
+      code: "Arch-GPT DB-JDBC-5001",
       messageKey: "backendErrors.jdbc.protocolFailed",
       messageParams: {},
       source: "jdbcAgent" as const,
@@ -394,13 +411,13 @@ describe("backend error translation", () => {
     expect(
       formatError({
         version: 1,
-        code: "PanDB-JDBC-5001",
+        code: "Arch-GPT DB-JDBC-5001",
         messageKey: "backendErrors.jdbc.protocolFailed",
         messageParams: {},
         source: "jdbcAgent",
         operationOutcome: "unknown",
       }),
-    ).toBe("PanDB-JDBC-5001");
+    ).toBe("Arch-GPT DB-JDBC-5001");
   });
 });
 

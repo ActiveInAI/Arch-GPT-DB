@@ -38,11 +38,11 @@ export function changelogLangFromLocale(locale: string): ChangelogLang {
 }
 
 export function changelogWebsiteUrl(_lang: ChangelogLang): string {
-  return "https://github.com/ActiveInAI/PanDB/releases";
+  return "https://github.com/ActiveInAI/Arch-GPT-DB/releases";
 }
 
 export function changelogReleaseUrl(tag: string): string {
-  return `https://github.com/ActiveInAI/PanDB/releases/tag/${encodeURIComponent(tag)}`;
+  return `https://github.com/ActiveInAI/Arch-GPT-DB/releases/tag/${encodeURIComponent(tag)}`;
 }
 
 export async function fetchChangelog(lang: ChangelogLang, options: { force?: boolean } = {}): Promise<ChangelogData> {

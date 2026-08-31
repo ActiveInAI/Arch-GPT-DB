@@ -1,8 +1,8 @@
-# PanDB
+# Arch-GPT DB
 
 25+ databases in 15 MB. Desktop & Docker self-hosting, with built-in AI assistant.
 
-Supported databases: MySQL, PostgreSQL, SQLite, Redis, MongoDB, DuckDB, ClickHouse, SQL Server, Oracle, Elasticsearch, MariaDB, TiDB, OceanBase, openGauss, GaussDB, KingBase, and more.
+Supported databases: MySQL, PostgreSQL, SQLite, Redis, MongoDB, DuckDB, ClickHouse, SQL Server, Oracle, Elasticsearch, MariaDB, TiDB, OceanBase, openGauss, GaussDB, KingbaseES, and more.
 
 ## Features
 
@@ -16,6 +16,6 @@ Supported databases: MySQL, PostgreSQL, SQLite, Redis, MongoDB, DuckDB, ClickHou
 
 ## Links
 
-- GitHub: https://github.com/ActiveInAI/PanDB
+- GitHub: https://github.com/ActiveInAI/Arch-GPT DB
 - Discord: https://discord.gg/W7NyVDRt6a
 - QQ 群: 1087880322

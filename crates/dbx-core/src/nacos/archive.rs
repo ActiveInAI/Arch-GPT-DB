@@ -170,7 +170,7 @@ pub fn decode_config_archive(bytes: &[u8], target_namespace: &str) -> Result<Vec
             return Err(format!("Duplicate Nacos configuration key: {}/{}", item.group, item.data_id));
         }
         let path = archive_entry_path(&item.group, &item.data_id);
-        // Archives exported by older PanDB versions and the Nacos console use
+        // Archives exported by older Arch-GPT DB versions and the Nacos console use
         // the direct `group/dataId` layout. Keep accepting it as a fallback;
         // new exports only use that layout when both components are safe.
         let legacy_path = format!("{}/{}", item.group, item.data_id);

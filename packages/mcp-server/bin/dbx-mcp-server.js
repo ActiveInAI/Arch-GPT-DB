@@ -22,7 +22,7 @@ function resolveBinary() {
   const platform = `${process.platform}-${process.arch}`;
   const target = platformPackages[platform];
   if (!target) {
-    throw new Error(`PanDB MCP does not provide a Rust binary for ${platform}.`);
+    throw new Error(`Arch-GPT DB MCP does not provide a Rust binary for ${platform}.`);
   }
   const [packageName, binaryName] = target;
   let manifest;
@@ -35,7 +35,7 @@ function resolveBinary() {
   }
   const binary = join(dirname(manifest), "bin", binaryName);
   if (!existsSync(binary)) {
-    throw new Error(`The PanDB MCP binary is missing from ${packageName}.`);
+    throw new Error(`The Arch-GPT DB MCP binary is missing from ${packageName}.`);
   }
   return binary;
 }
@@ -44,17 +44,21 @@ try {
   if (process.argv[2] === "--verify-platform") {
     const platform = `${process.platform}-${process.arch}`;
     if (!platformPackages[platform]) {
-      throw new Error(`PanDB MCP does not provide a Rust binary for ${platform}.`);
+      throw new Error(`Arch-GPT DB MCP does not provide a Rust binary for ${platform}.`);
     }
     process.exit(0);
   }
   const binary = resolveBinary();
-  const child = spawn(binary, process.argv.slice(2), { stdio: "inherit", env: process.env });
+  const child = spawn(binary, process.argv.slice(2), {
+    stdio: "inherit",
+    env: process.env,
+    windowsHide: true,
+  });
   for (const signal of ["SIGINT", "SIGTERM"]) {
     process.on(signal, () => child.kill(signal));
   }
   child.on("error", (error) => {
-    console.error(`Failed to start PanDB MCP: ${error.message}`);
+    console.error(`Failed to start Arch-GPT DB MCP: ${error.message}`);
     process.exit(1);
   });
   child.on("exit", (code, signal) => {

@@ -92,7 +92,7 @@ export function loadDataGridColumnLayout(scopeKey: string, columnKeys: readonly 
     if (parsed.columnSignature && parsed.columnSignature !== columnKeys.join("\0")) return null;
     return { orderKeys: normalizedStringList(parsed.order), hiddenKeys: [] };
   } catch (error) {
-    console.warn(`[PanDB][data-grid-column-layout:parse] ${scopeKey}`, error);
+    console.warn(`[Arch-GPT DB][data-grid-column-layout:parse] ${scopeKey}`, error);
     return null;
   }
 }

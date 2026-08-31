@@ -228,7 +228,7 @@ test("does not sync invalid JSON drafts", () => {
   assert.deepEqual(synced, DEFAULT_SQL_FORMATTER_SETTINGS);
 });
 
-test("maps PanDB formatter settings to sql-formatter options", () => {
+test("maps Arch-GPT DB formatter settings to sql-formatter options", () => {
   assert.deepEqual(
     sqlFormatterOptions({
       ...DEFAULT_SQL_FORMATTER_SETTINGS,
@@ -250,6 +250,8 @@ test("maps PanDB formatter settings to sql-formatter options", () => {
       denseOperators: false,
       newlineBeforeSemicolon: true,
       paramTypes: {
+        positional: true,
+        named: [":", "@"],
         custom: [{ regex: String.raw`\$\{[^}]+\}` }, { regex: String.raw`#\{[^}]+\}` }],
       },
     },
@@ -275,6 +277,7 @@ test("maps PanDB formatter settings to sql-formatter options", () => {
       newlineBeforeSemicolon: false,
       paramTypes: {
         positional: true,
+        named: [":", "@"],
         custom: [{ regex: String.raw`\$\{[^}]+\}` }, { regex: String.raw`#\{[^}]+\}` }],
       },
     },

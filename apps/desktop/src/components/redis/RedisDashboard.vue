@@ -279,7 +279,7 @@ onMounted(async () => {
   try {
     await connectionStore.ensureConnected(props.connectionId);
   } catch (e) {
-    console.warn("[PanDB] ensureConnected failed for", props.connectionId, e);
+    console.warn("[Arch-GPT DB] ensureConnected failed for", props.connectionId, e);
   }
   await fetchClusterNodes();
   await fetchInfo();

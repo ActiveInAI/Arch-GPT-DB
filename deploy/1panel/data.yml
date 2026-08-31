@@ -1,11 +1,11 @@
-name: PanDB
+name: Arch-GPT DB
 tags:
   - 工具
 title: 轻量级数据库管理工具
 description: 轻量级数据库管理工具，支持 25+ 种数据库
 additionalProperties:
   key: dbx
-  name: PanDB
+  name: Arch-GPT DB
   tags:
     - Tool
   shortDescZh: 轻量级数据库管理工具，支持 25+ 种数据库
@@ -17,8 +17,8 @@ additionalProperties:
   crossVersionUpdate: true
   limit: 0
   recommend: 0
-  website: https://github.com/ActiveInAI/PanDB
-  github: https://github.com/ActiveInAI/PanDB
-  document: https://github.com/ActiveInAI/PanDB#readme
+  website: https://github.com/ActiveInAI/Arch-GPT DB
+  github: https://github.com/ActiveInAI/Arch-GPT DB
+  document: https://github.com/ActiveInAI/Arch-GPT DB#readme
   architectures:
     - amd64

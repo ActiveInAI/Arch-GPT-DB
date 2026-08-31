@@ -1,17 +1,17 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.t8y2/dbx",
-  "description": "Query and manage databases from AI agents using connections configured in PanDB.",
+  "description": "Query and manage databases from AI agents using connections configured in Arch-GPT DB.",
   "repository": {
-    "url": "https://github.com/ActiveInAI/PanDB",
+    "url": "https://github.com/ActiveInAI/Arch-GPT-DB",
     "source": "github"
   },
-  "version": "0.4.55",
+  "version": "0.4.74",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "@dbx-app/mcp-server",
-      "version": "0.4.55",
+      "version": "0.4.74",
       "transport": {
         "type": "stdio"
       }

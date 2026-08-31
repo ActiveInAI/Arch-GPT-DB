@@ -20,7 +20,7 @@ const baseEntry: HistoryAiAnalysisEntry = {
 test("buildHistoryAiAnalysisPrompt includes operation details and rollback SQL", () => {
   const prompt = buildHistoryAiAnalysisPrompt(baseEntry);
 
-  assert.match(prompt, /Analyse this PanDB history entry/);
+  assert.match(prompt, /Analyse this Arch-GPT DB history entry/);
   assert.match(prompt, /Connection: Local MySQL/);
   assert.match(prompt, /Operation: UPDATE/);
   assert.match(prompt, /Affected rows: 1/);

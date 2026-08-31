@@ -210,7 +210,7 @@ pub fn claude_code_cli_env(config: &AiConfig) -> Result<Vec<(String, String)>, S
         }
         if is_reserved_dbx_mcp_env_name(key) {
             return Err(format!(
-                "[claudeCodeEnvReserved] `{key}` is managed by PanDB for the scoped MCP server and cannot be set here."
+                "[claudeCodeEnvReserved] `{key}` is managed by Arch-GPT DB for the scoped MCP server and cannot be set here."
             ));
         }
         env.insert(key.to_string(), value.clone());
@@ -525,6 +525,7 @@ pub async fn run_claude_code_agent(
         CliAgentProcessSpec {
             command,
             env,
+            env_remove: Vec::new(),
             current_dir: Some(isolated_cwd.path.clone()),
             stdin: Some(prompt.to_string()),
             dialect: CliAgentJsonlDialect::ClaudeCodePrint,
@@ -580,6 +581,16 @@ mod tests {
             claude_code_cli_env: Default::default(),
             pi_agent_cli_path: None,
             pi_agent_cli_env: Default::default(),
+            opencode_cli_path: None,
+            opencode_cli_env: Default::default(),
+            cursor_cli_path: None,
+            cursor_cli_env: Default::default(),
+            grok_cli_path: None,
+            grok_cli_env: Default::default(),
+            codebuddy_cli_path: None,
+            codebuddy_cli_env: Default::default(),
+            qoder_cli_path: None,
+            qoder_cli_env: Default::default(),
         }
     }
 

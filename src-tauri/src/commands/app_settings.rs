@@ -101,7 +101,8 @@ pub fn mark_frontend_ready(app: AppHandle) -> Result<(), String> {
     let state =
         app.try_state::<CloseBehaviorState>().ok_or_else(|| "close behavior state is unavailable".to_string())?;
     state.set_frontend_ready(true);
-    clear_startup_probe_after_frontend_ready();
+    let main_window_visible = app.get_webview_window("main").is_some_and(|window| window.is_visible().unwrap_or(false));
+    clear_startup_probe_after_frontend_ready(main_window_visible);
     Ok(())
 }
 
@@ -164,6 +165,19 @@ pub async fn save_saved_sql_editor_positions(
     positions: serde_json::Value,
 ) -> Result<(), String> {
     state.storage.save_saved_sql_editor_positions(&positions).await
+}
+
+#[tauri::command]
+pub async fn load_transfer_task_library(state: State<'_, Arc<AppState>>) -> Result<Option<serde_json::Value>, String> {
+    state.storage.load_transfer_task_library().await
+}
+
+#[tauri::command]
+pub async fn save_transfer_task_library(
+    state: State<'_, Arc<AppState>>,
+    library: serde_json::Value,
+) -> Result<(), String> {
+    state.storage.save_transfer_task_library(&library).await
 }
 
 #[tauri::command]
@@ -518,40 +532,40 @@ mod tests {
     #[test]
     fn plugin_store_result_uses_selected_directory_without_agent_prefix() {
         let settings = DesktopSettings {
-            plugin_store_dir: Some(path("D:/develop/PanDB")),
-            agent_store_dir: Some(path("D:/develop/PanDB/agents")),
+            plugin_store_dir: Some(path("D:/develop/Arch-GPT DB")),
+            agent_store_dir: Some(path("D:/develop/Arch-GPT DB/agents")),
             ..Default::default()
         };
-        let plugins_dir = PathBuf::from(path("D:/develop/PanDB"));
-        let agents_dir = PathBuf::from(path("D:/develop/PanDB/agents"));
+        let plugins_dir = PathBuf::from(path("D:/develop/Arch-GPT DB"));
+        let agents_dir = PathBuf::from(path("D:/develop/Arch-GPT DB/agents"));
 
         let result = driver_store_migration_result(settings, &plugins_dir, &agents_dir, true, false);
 
-        assert_eq!(result.plugin_store_dir.as_deref(), Some(path("D:/develop/PanDB").as_str()));
-        assert_eq!(result.plugins_dir, path("D:/develop/PanDB"));
-        assert_eq!(result.agents_dir, path("D:/develop/PanDB/agents"));
+        assert_eq!(result.plugin_store_dir.as_deref(), Some(path("D:/develop/Arch-GPT DB").as_str()));
+        assert_eq!(result.plugins_dir, path("D:/develop/Arch-GPT DB"));
+        assert_eq!(result.agents_dir, path("D:/develop/Arch-GPT DB/agents"));
         assert!(!result.plugins_dir.contains(&path("agents/com.dbx.app/plugins")));
     }
 
     #[test]
     fn legacy_driver_store_result_keeps_plugins_and_agents_as_siblings() {
-        let settings = DesktopSettings { driver_store_dir: Some(path("D:/develop/PanDB")), ..Default::default() };
-        let plugins_dir = PathBuf::from(path("D:/develop/PanDB/plugins"));
-        let agents_dir = PathBuf::from(path("D:/develop/PanDB/agents"));
+        let settings = DesktopSettings { driver_store_dir: Some(path("D:/develop/Arch-GPT DB")), ..Default::default() };
+        let plugins_dir = PathBuf::from(path("D:/develop/Arch-GPT DB/plugins"));
+        let agents_dir = PathBuf::from(path("D:/develop/Arch-GPT DB/agents"));
 
         let result = driver_store_migration_result(settings, &plugins_dir, &agents_dir, true, true);
 
-        assert_eq!(result.driver_store_dir.as_deref(), Some(path("D:/develop/PanDB").as_str()));
-        assert_eq!(result.plugins_dir, path("D:/develop/PanDB/plugins"));
-        assert_eq!(result.agents_dir, path("D:/develop/PanDB/agents"));
+        assert_eq!(result.driver_store_dir.as_deref(), Some(path("D:/develop/Arch-GPT DB").as_str()));
+        assert_eq!(result.plugins_dir, path("D:/develop/Arch-GPT DB/plugins"));
+        assert_eq!(result.agents_dir, path("D:/develop/Arch-GPT DB/agents"));
     }
 
     #[test]
     fn resolves_separate_plugin_store_dir_as_exact_selected_dir() {
         let settings = DesktopSettings {
             driver_store_dir: Some(path("D:/legacy-base")),
-            plugin_store_dir: Some(path("D:/develop/PanDB")),
-            agent_store_dir: Some(path("D:/develop/PanDB/agents")),
+            plugin_store_dir: Some(path("D:/develop/Arch-GPT DB")),
+            agent_store_dir: Some(path("D:/develop/Arch-GPT DB/agents")),
             ..Default::default()
         };
 
@@ -561,13 +575,13 @@ mod tests {
             Some(PathBuf::from(path("C:/Users/lenovo/.dbx/agents"))),
         );
 
-        assert_eq!(plugins_dir, PathBuf::from(path("D:/develop/PanDB")));
-        assert_eq!(agents_dir, Some(PathBuf::from(path("D:/develop/PanDB/agents"))));
+        assert_eq!(plugins_dir, PathBuf::from(path("D:/develop/Arch-GPT DB")));
+        assert_eq!(agents_dir, Some(PathBuf::from(path("D:/develop/Arch-GPT DB/agents"))));
     }
 
     #[test]
     fn resolves_legacy_driver_store_dir_to_sibling_plugins_and_agents() {
-        let settings = DesktopSettings { driver_store_dir: Some(path("D:/develop/PanDB")), ..Default::default() };
+        let settings = DesktopSettings { driver_store_dir: Some(path("D:/develop/Arch-GPT DB")), ..Default::default() };
 
         let (plugins_dir, agents_dir) = resolve_driver_store_dirs_from_settings(
             &settings,
@@ -575,8 +589,8 @@ mod tests {
             Some(PathBuf::from(path("C:/Users/lenovo/.dbx/agents"))),
         );
 
-        assert_eq!(plugins_dir, PathBuf::from(path("D:/develop/PanDB/plugins")));
-        assert_eq!(agents_dir, Some(PathBuf::from(path("D:/develop/PanDB/agents"))));
+        assert_eq!(plugins_dir, PathBuf::from(path("D:/develop/Arch-GPT DB/plugins")));
+        assert_eq!(agents_dir, Some(PathBuf::from(path("D:/develop/Arch-GPT DB/agents"))));
     }
 
     #[test]

@@ -1,6 +1,6 @@
-# PanDB CLI
+# Arch-GPT DB CLI
 
-Command line interface for PanDB database connections, schema inspection, safe queries, and prompt-ready schema context.
+Command line interface for Arch-GPT DB database connections, schema inspection, safe queries, and prompt-ready schema context.
 
 ## Install
 
@@ -13,7 +13,7 @@ npm install -g @dbx-app/cli
 ### Homebrew
 
 ```bash
-brew tap t8y2/dbx
+brew tap t8y2/tap
 brew install dbx-cli
 ```
 
@@ -41,7 +41,7 @@ chmod +x dbx
 ./dbx connections list --json
 ```
 
-Standalone binaries do not require Node.js. They read the same PanDB connection storage as the desktop application; set `DBX_DATA_DIR` when using a custom or portable data directory.
+Standalone binaries do not require Node.js. They read the same Arch-GPT DB connection storage as the desktop application; set `DBX_DATA_DIR` when using a custom or portable data directory.
 
 ## Usage
 
@@ -64,15 +64,15 @@ dbx open local users
 
 | Command                                     | Description                                           |
 | ------------------------------------------- | ----------------------------------------------------- |
-| `dbx doctor`                                | Show local PanDB config and desktop bridge diagnostics  |
+| `dbx doctor`                                | Show local Arch-GPT DB config and desktop bridge diagnostics  |
 | `dbx capabilities`                          | Show direct-query and desktop-bridge database support |
-| `dbx connections list`                      | List PanDB connections without printing secrets         |
+| `dbx connections list`                      | List Arch-GPT DB connections without printing secrets         |
 | `dbx schema list <connection>`              | List tables and views                                 |
 | `dbx schema describe <connection> <table>`  | Show table columns                                    |
 | `dbx query <connection> <sql>`              | Execute one SQL statement                             |
 | `dbx query <connection> --file ./query.sql` | Execute SQL from a file                               |
 | `dbx context <connection>`                  | Print compact schema context for prompts              |
-| `dbx open <connection> <table>`             | Open a table in PanDB Desktop                           |
+| `dbx open <connection> <table>`             | Open a table in Arch-GPT DB Desktop                           |
 
 ## Output
 
@@ -106,7 +106,7 @@ DBX_CONNECTION=local dbx context --tables users,orders
 
 ## Desktop App Requirements
 
-Some CLI commands can run without PanDB Desktop:
+Some CLI commands can run without Arch-GPT DB Desktop:
 
 - `connections list`
 - `schema list`
@@ -114,9 +114,9 @@ Some CLI commands can run without PanDB Desktop:
 - `query`
 - `context`
 
-Direct execution supports PostgreSQL/Redshift, MySQL-compatible databases (MySQL, Doris, StarRocks), and SQLite. Other database types use the PanDB Desktop bridge or PanDB Agent/JDBC infrastructure.
+Direct execution supports PostgreSQL/Redshift, MySQL-compatible databases (MySQL, Doris, StarRocks), and SQLite. Other database types use the Arch-GPT DB Desktop bridge or Arch-GPT DB Agent/JDBC infrastructure.
 
-Use `dbx doctor` to check whether the PanDB connection database, connection table, native SQLite loader, and desktop bridge are available. Use `dbx capabilities` to list direct-query and bridge-required database types.
+Use `dbx doctor` to check whether the Arch-GPT DB connection database, connection table, native SQLite loader, and desktop bridge are available. Use `dbx capabilities` to list direct-query and bridge-required database types.
 
 If the optional platform package was not installed, reinstall without `--no-optional`:
 
@@ -136,10 +136,10 @@ CLI JSON errors use stable codes:
 | `UNKNOWN_OPTION`         | An unsupported flag was provided                    |
 | `INVALID_OPTION`         | A flag is missing a value or has an invalid value   |
 | `INVALID_ARGUMENT`       | Positional arguments are missing or conflicting     |
-| `CONNECTION_STORE_ERROR` | PanDB connection storage exists but could not be read |
-| `CONNECTION_NOT_FOUND`   | No PanDB connection matched the requested name        |
+| `CONNECTION_STORE_ERROR` | Arch-GPT DB connection storage exists but could not be read |
+| `CONNECTION_NOT_FOUND`   | No Arch-GPT DB connection matched the requested name        |
 | `SQL_BLOCKED`            | SQL safety rules blocked execution                  |
-| `DBX_NOT_RUNNING`        | PanDB Desktop bridge is unavailable                   |
+| `DBX_NOT_RUNNING`        | Arch-GPT DB Desktop bridge is unavailable                   |
 | `ERROR`                  | Unexpected runtime failure                          |
 
 ## Codex

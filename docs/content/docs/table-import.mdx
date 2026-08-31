@@ -1,9 +1,9 @@
 ---
 title: Table Import
-description: Use a guided workflow to import CSV, TSV, text, JSON, or Excel data into an existing table or create new tables in batches.
+description: Use a guided workflow to import CSV, TSV, text, JSON, Excel, or SQL data into an existing table or create new tables in batches.
 ---
 
-Table Import writes file data into database tables. PanDB parses and previews the source first, then asks you to review parsing options, the target, column mappings, and execution settings before any rows are written.
+Table Import writes file data into database tables. Arch-GPT DB parses and previews the source first, then asks you to review parsing options, the target, column mappings, and execution settings before any rows are written.
 
 <Callout type="warn">Import performs real database writes. Connection read-only protection blocks the operation, but database privileges remain the final boundary. Verify the target connection, target table, and backup plan before importing into production.</Callout>
 
@@ -14,7 +14,7 @@ Table Import writes file data into database tables. PanDB parses and previews th
 | Existing table | Loads target columns and maps source fields; supports append or truncate-then-import | Backfills, test data restoration, and sample data replacement |
 | Create new table | Infers column types from preview data and lets you edit the table name, column names, and types | Fast file-to-table workflows, spreadsheet migration, and multi-file imports |
 
-Create-table mode accepts multiple files at once. Excel workbooks are expanded into separate tasks per worksheet. PanDB suggests a table name for each file or sheet and requires the final names to be unique. Tasks run sequentially and keep independent previews, mappings, and type settings.
+Create-table mode accepts multiple files at once. Excel workbooks are expanded into separate tasks per worksheet. Arch-GPT DB suggests a table name for each file or sheet and requires the final names to be unique. Tasks run sequentially and keep independent previews, mappings, and type settings.
 
 ## Supported Files
 
@@ -25,6 +25,11 @@ Create-table mode accepts multiple files at once. Excel workbooks are expanded i
 | Delimited text | Files such as `.txt` with a custom delimiter |
 | JSON | A single object, object rows, or array rows; the shape can be selected explicitly |
 | Excel | `.xlsx`, `.xlsm`, and `.xls`, with worksheet selection |
+| SQL | `.sql` scripts containing literal `INSERT INTO ... VALUES` statements for one table |
+
+SQL import accepts only literal `INSERT INTO ... VALUES` rows. Expressions, `REPLACE`, `INSERT IGNORE`, `INSERT ... SELECT`, and other constructs that cannot be rewritten losslessly are rejected so data and statement semantics are preserved.
+
+SQL import reads the whole script through the non-streaming path, so each `.sql` file is limited to 100 MB; larger files are rejected with an explicit error. Values written with date functions such as `TO_DATE` and `TO_TIMESTAMP` are imported as the text of their first argument, and the target column must be able to parse that format.
 
 Desktop reads selected local files directly. Docker/Web uploads browser-selected files to temporary server storage, then releases the prepared source after preview and import finish.
 
@@ -67,7 +72,7 @@ Desktop reads selected local files directly. Docker/Web uploads browser-selected
 
 ### Text Encoding
 
-CSV, TSV, and delimited text support auto detection, UTF-8, GBK, UTF-16 LE, and UTF-16 BE. If detection is wrong, select an encoding manually and recheck the preview.
+CSV, TSV, delimited text, and SQL scripts support auto detection, UTF-8, GBK, UTF-16 LE, and UTF-16 BE. If detection is wrong, select an encoding manually and recheck the preview.
 
 ### Row Range
 
@@ -85,14 +90,14 @@ CSV, TSV, and delimited text support auto detection, UTF-8, GBK, UTF-16 LE, and 
 
 ## Mapping and Table Creation
 
-For existing tables, PanDB first matches exact names, then normalized names. Normalization ignores case and differences in spaces, underscores, and hyphens.
+For existing tables, Arch-GPT DB first matches exact names, then normalized names. Normalization ignores case and differences in spaces, underscores, and hyphens.
 
 - Source columns can be skipped
 - A target column cannot be mapped more than once
 - At least one column must be mapped
 - Required unmapped columns need a default, auto-generated behavior, or nullable definition
 
-For new tables, source columns initially map to same-name targets and PanDB suggests database-specific types from preview values. Suggestions are only a starting point; review dates, precision, long text, JSON, binary values, and engine-specific types before execution.
+For new tables, source columns initially map to same-name targets and Arch-GPT DB suggests database-specific types from preview values. Suggestions are only a starting point; review dates, precision, long text, JSON, binary values, and engine-specific types before execution.
 
 ## Modes and Batches
 
@@ -106,9 +111,9 @@ New-table and multi-file imports always use append because each target is create
 
 ## Database Coverage
 
-PanDB exposes Table Import through the driver capability manifest. Only connections that implement column discovery, table creation or writing, and required type conversion enable the action. Specialized Redis, MongoDB, search, vector, message queue, and configuration-center workspaces use their own workflows instead of this relational table importer.
+Arch-GPT DB exposes Table Import through the driver capability manifest. Only connections that implement column discovery, table creation or writing, and required type conversion enable the action. Specialized Redis, MongoDB, search, vector, message queue, and configuration-center workspaces use their own workflows instead of this relational table importer.
 
-Being able to connect does not imply Table Import support. If the action is absent, check the database type, driver mode, and PanDB version before treating it as a privilege problem.
+Being able to connect does not imply Table Import support. If the action is absent, check the database type, driver mode, and Arch-GPT DB version before treating it as a privilege problem.
 
 ## Failure and Cancellation
 

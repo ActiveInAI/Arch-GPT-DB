@@ -125,7 +125,7 @@ pub enum TableKind {
 pub enum NoteSource {
     /// Read from a database COMMENT.
     Database,
-    /// Authored in PanDB, stored in the notes file.
+    /// Authored in Arch-GPT DB, stored in the notes file.
     Local,
     None,
 }

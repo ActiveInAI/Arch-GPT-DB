@@ -1,6 +1,6 @@
 class DbxCli < Formula
-  desc "Command-line interface for PanDB database connections, schema, and safe queries"
-  homepage "https://github.com/ActiveInAI/PanDB"
+  desc "Command-line interface for Arch-GPT DB database connections, schema, and safe queries"
+  homepage "https://github.com/ActiveInAI/Arch-GPT DB"
   url "https://registry.npmjs.org/@dbx-app/cli/-/cli-0.4.7.tgz"
   sha256 "d507138dc5bd9611ad1e668a14e5a099754e8a1a3994742f2d03dbc22da911d8"
   license "Apache-2.0"

@@ -2,7 +2,7 @@
 //!
 //! ## 架构
 //! ```text
-//! PanDB 前端 (Vue)
+//! Arch-GPT DB 前端 (Vue)
 //!     │ Tauri invoke
 //!     ▼
 //! src-tauri/src/commands/mqtt_cmd.rs  (Tauri command 入口)

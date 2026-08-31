@@ -73,7 +73,7 @@ mod tests {
         let error = AppError::internal("database failed");
         assert_eq!(error.status, StatusCode::INTERNAL_SERVER_ERROR);
         assert_eq!(error.error.version(), 1);
-        assert_eq!(error.error.code(), "PanDB-LEGACY-0001");
+        assert_eq!(error.error.code(), "Arch-GPT DB-LEGACY-0001");
         assert_eq!(error.message, "database failed");
     }
 
@@ -87,7 +87,7 @@ mod tests {
         let error = AppError::from(
             "Agent RPC error (-1): timed out\nDBX_AGENT_ERROR_DATA:{\"category\":\"timeout\",\"stage\":\"execute\"}",
         );
-        assert_eq!(error.error.code(), "PanDB-JDBC-9001");
+        assert_eq!(error.error.code(), "Arch-GPT DB-JDBC-9001");
         assert_eq!(error.error.source(), dbx_core::backend_error::BackendErrorSource::JdbcAgentLegacy);
     }
 
@@ -99,7 +99,7 @@ mod tests {
         let body = axum::body::to_bytes(response.into_body(), usize::MAX).await.unwrap();
         let payload: serde_json::Value = serde_json::from_slice(&body).unwrap();
         assert_eq!(payload["version"], 1);
-        assert_eq!(payload["code"], "PanDB-LEGACY-0001");
+        assert_eq!(payload["code"], "Arch-GPT DB-LEGACY-0001");
         assert_eq!(payload["messageKey"], "backendErrors.legacy");
         assert_eq!(payload["detail"], "database failed");
     }
@@ -109,7 +109,7 @@ mod tests {
         let response = AppError::internal("Incorrect syntax near SELECT").into_response();
         let body = axum::body::to_bytes(response.into_body(), usize::MAX).await.unwrap();
         let payload: serde_json::Value = serde_json::from_slice(&body).unwrap();
-        assert_eq!(payload["code"], "PanDB-LEGACY-0001");
+        assert_eq!(payload["code"], "Arch-GPT DB-LEGACY-0001");
         assert_eq!(payload["detail"], "Incorrect syntax near SELECT");
     }
 
@@ -141,7 +141,7 @@ mod tests {
         let body = axum::body::to_bytes(response.into_body(), usize::MAX).await.unwrap();
         let payload: serde_json::Value = serde_json::from_slice(&body).unwrap();
 
-        assert_eq!(payload["code"], "PanDB-JDBC-4001");
+        assert_eq!(payload["code"], "Arch-GPT DB-JDBC-4001");
         assert_eq!(payload["source"], "jdbcAgent");
         assert_eq!(payload["detail"], "relation customer_orders does not exist");
         assert!(payload["diagnostics"].get("agentSessionId").is_none());

@@ -336,21 +336,21 @@ fn local_agent_jar_candidates_include_monorepo_and_legacy_build_output() {
 fn github_agent_asset_urls_map_to_r2_paths_by_category() {
     assert_eq!(
         github_url_to_r2_path(
-            "https://github.com/ActiveInAI/PanDB-agents/releases/download/v1/dbx-jre-21.tar.gz",
+            "https://github.com/ActiveInAI/Arch-GPT-DB-agents/releases/download/v1/dbx-jre-21.tar.gz",
             "jre"
         ),
         "agents/jre/dbx-jre-21.tar.gz"
     );
     assert_eq!(
         github_url_to_r2_path(
-            "https://github.com/ActiveInAI/PanDB-agents/releases/download/v1/dbx-agent-h2.jar",
+            "https://github.com/ActiveInAI/Arch-GPT-DB-agents/releases/download/v1/dbx-agent-h2.jar",
             "driver"
         ),
         "agents/drivers/dbx-agent-h2.jar"
     );
     assert_eq!(
         github_url_to_r2_path(
-            "https://github.com/ActiveInAI/PanDB/releases/download/agents-v0.3.0/dbx-agent-h2.jar",
+            "https://github.com/ActiveInAI/Arch-GPT-DB/releases/download/agents-v0.3.0/dbx-agent-h2.jar",
             "driver"
         ),
         "agents/drivers/dbx-agent-h2.jar"
@@ -821,6 +821,20 @@ fn offline_zip_import_rejects_unknown_driver_type() {
     let err = inspect_offline_zip(&zip_path).unwrap_err();
 
     assert!(err.contains("unknown driver type"));
+}
+
+#[tokio::test]
+async fn offline_zip_import_accepts_hidden_legacy_h2_driver() {
+    let manager = test_manager("offline-h2-legacy-driver");
+    let zip_path = test_path("offline-h2-legacy-driver").join("agents.zip");
+    std::fs::create_dir_all(zip_path.parent().unwrap()).unwrap();
+    write_offline_driver_zip_with_jar(&zip_path, "h2-legacy", "0.1.18", test_agent_jar_bytes());
+
+    let result = import_agents_from_zip(&manager, &zip_path, |_| {}).await.unwrap();
+
+    assert_eq!(result.drivers_installed, vec!["h2-legacy"]);
+    assert!(manager.is_driver_installed("h2-legacy"));
+    assert_eq!(manager.load_state().installed_drivers["h2-legacy"].version, "0.1.18");
 }
 
 #[test]
