@@ -316,7 +316,9 @@ async fn ensure_write_with_risk(
     let policy = load_policy(state).await?;
     ensure_allowed(&policy, connection_id)?;
     if policy.read_only {
-        return Err(AppError::from(format!("MCP_READ_ONLY: Arch-GPT DB MCP read-only mode is enabled. {action} blocked.")));
+        return Err(AppError::from(format!(
+            "MCP_READ_ONLY: Arch-GPT DB MCP read-only mode is enabled. {action} blocked."
+        )));
     }
     if dangerous && !policy.allow_dangerous_sql {
         return Err(AppError::from(format!(

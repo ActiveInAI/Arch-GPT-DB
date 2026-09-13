@@ -265,7 +265,7 @@ pub async fn race_download_urls(
 
 #[cfg(test)]
 mod tests {
-    use super::{download_candidate_urls, DownloadSource};
+    use super::{download_candidate_urls, DownloadSource, R2_CDN_BASE};
 
     #[test]
     fn download_candidates_exclude_third_party_github_proxy() {
@@ -277,20 +277,21 @@ mod tests {
         assert_eq!(
             urls,
             vec![
-                "https://dl.dbxio.com/releases/latest/latest.json",
-                "https://github.com/ActiveInAI/Arch-GPT-DB/releases/latest/download/latest.json",
+                format!("{R2_CDN_BASE}releases/latest/latest.json"),
+                "https://github.com/ActiveInAI/Arch-GPT-DB/releases/latest/download/latest.json".to_string(),
             ]
         );
     }
 
     #[test]
     fn mirror_download_candidates_prefer_selected_source() {
-        let github_url = "https://github.com/ActiveInAI/Arch-GPT-DB/releases/download/agents-latest/agent-registry.json";
+        let github_url =
+            "https://github.com/ActiveInAI/Arch-GPT-DB/releases/download/agents-latest/agent-registry.json";
         assert_eq!(
             DownloadSource::Cnb.download_candidate_urls(github_url, "agents/agent-registry.json").unwrap(),
             vec![
-                "https://cnb.cool/dbxio.com/dbx/-/releases/download/agents-latest/agent-registry.json",
-                "https://dl.dbxio.com/agents/agent-registry.json",
+                "https://cnb.cool/dbxio.com/dbx/-/releases/download/agents-latest/agent-registry.json".to_string(),
+                format!("{R2_CDN_BASE}agents/agent-registry.json"),
             ]
         );
     }

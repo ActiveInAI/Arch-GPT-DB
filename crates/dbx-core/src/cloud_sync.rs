@@ -659,8 +659,10 @@ impl SnippetSyncClient {
                 // encrypted Arch-GPT DB envelope. It must first prove to be a legacy Arch-GPT DB
                 // snapshot, and the caller must explicitly request migration.
                 if !is_legacy_dbx_snapshot(&existing_content) {
-                    return Err("The selected snippet is not a Arch-GPT DB sync snapshot; refusing to replace or delete it."
-                        .to_string());
+                    return Err(
+                        "The selected snippet is not a Arch-GPT DB sync snapshot; refusing to replace or delete it."
+                            .to_string(),
+                    );
                 }
                 if !self.config.replace_legacy_snippet {
                     return Err(
@@ -1329,7 +1331,9 @@ fn is_legacy_dbx_snapshot(content: &str) -> bool {
 
 fn parse_legacy_dbx_snapshot(content: &str) -> Result<SyncSnapshot, String> {
     if !is_legacy_dbx_snapshot(content) {
-        return Err("The selected snippet is not a Arch-GPT DB sync snapshot; refusing to replace or delete it.".to_string());
+        return Err(
+            "The selected snippet is not a Arch-GPT DB sync snapshot; refusing to replace or delete it.".to_string()
+        );
     }
     serde_json::from_str(content).map_err(|_| {
         "The legacy Arch-GPT DB snapshot is incompatible with this version, so it will not be replaced or deleted."
@@ -1900,7 +1904,10 @@ mod tests {
     fn normalizes_remote_path_separators() {
         assert_eq!(normalized_remote_path(Some("/custom/snapshot.json")), "custom/snapshot.json");
         assert_eq!(normalized_remote_path(Some(r"\Arch-GPT DB\sync\snapshot.json")), "Arch-GPT DB/sync/snapshot.json");
-        assert_eq!(normalized_remote_path(Some("///Arch-GPT DB//sync/./snapshot.json")), "Arch-GPT DB/sync/snapshot.json");
+        assert_eq!(
+            normalized_remote_path(Some("///Arch-GPT DB//sync/./snapshot.json")),
+            "Arch-GPT DB/sync/snapshot.json"
+        );
         assert_eq!(normalized_remote_path(Some("Arch-GPT DB/sync/../snapshot.json")), "Arch-GPT DB/snapshot.json");
     }
 

@@ -70,6 +70,7 @@ pub fn alternative_data_dir(resolution: &DataDirResolution) -> Option<PathBuf> {
 
 /// Returns the nearest compatible Arch-GPT DB/DBX data directory only for a normal installed launch.
 /// Custom and portable directories are already explicit user choices and must not import from it.
+#[cfg(test)]
 pub fn legacy_app_data_dir(resolution: &DataDirResolution) -> Option<PathBuf> {
     if !matches!(resolution.mode, DataDirMode::Default) {
         return None;
@@ -159,24 +160,21 @@ mod tests {
     };
 
     #[test]
-    fn pandb_data_dir_override_wins_over_legacy_dbx_data_dir() {
+    fn arch_gpt_db_data_dir_override_wins_over_legacy_dbx_data_dir() {
         let resolved = data_dir_override(Some(r"E:\Arch-GPT DBData".into()), Some(r"E:\DBXData".into()));
         assert_eq!(resolved, Some(PathBuf::from(r"E:\Arch-GPT DBData")));
     }
 
     #[test]
-    fn installed_pandb_app_uses_dbx_directory_as_one_time_import_source() {
+    fn installed_arch_gpt_db_app_uses_dbx_directory_as_one_time_import_source() {
         let resolution = resolve_data_dir_from_inputs(
-            PathBuf::from(r"C:\Users\Administrator\AppData\Roaming\com.activeinai.pandb"),
+            PathBuf::from("app-data").join("com.activeinai.archgptdb"),
             None,
             false,
             false,
             None,
         );
-        assert_eq!(
-            legacy_app_data_dir(&resolution),
-            Some(PathBuf::from(r"C:\Users\Administrator\AppData\Roaming\com.dbx.app"))
-        );
+        assert_eq!(legacy_app_data_dir(&resolution), Some(PathBuf::from("app-data").join("com.dbx.app")));
     }
 
     #[test]

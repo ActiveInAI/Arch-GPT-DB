@@ -3367,14 +3367,18 @@ mod tests {
         config.db_type = DatabaseType::SqlServer;
         config.driver_profile = Some("sqlserver".to_string());
         config.driver_label = Some("SQL Server".to_string());
-        config.url_params =
-            Some("applicationName={Arch-GPT DB; Client};password=50%;sqlserverEncryption=disabled;encrypt=false".to_string());
+        config.url_params = Some(
+            "applicationName={Arch-GPT DB; Client};password=50%;sqlserverEncryption=disabled;encrypt=false".to_string(),
+        );
 
         let canonical = config.canonicalized();
 
         assert_eq!(canonical.driver_profile.as_deref(), Some("sqlserver-legacy"));
         assert_eq!(canonical.driver_label.as_deref(), Some("SQL Server legacy compatibility component"));
-        assert_eq!(canonical.url_params.as_deref(), Some("applicationName={Arch-GPT DB; Client};password=50%;encrypt=false"));
+        assert_eq!(
+            canonical.url_params.as_deref(),
+            Some("applicationName={Arch-GPT DB; Client};password=50%;encrypt=false")
+        );
         assert_eq!(without_sqlserver_legacy_compatibility_param(Some("sqlserverEncryption=disabled")), None);
     }
 

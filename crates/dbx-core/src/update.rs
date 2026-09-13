@@ -417,7 +417,10 @@ HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings
 
         assert_eq!(jdbc.version, "0.1.3");
         assert_eq!(jdbc.protocol_version, 1);
-        assert_eq!(jdbc.url, "https://github.com/ActiveInAI/Arch-GPT-DB/releases/latest/download/dbx-jdbc-plugin-latest.zip");
+        assert_eq!(
+            jdbc.url,
+            "https://github.com/ActiveInAI/Arch-GPT-DB/releases/latest/download/dbx-jdbc-plugin-latest.zip"
+        );
     }
 
     #[test]

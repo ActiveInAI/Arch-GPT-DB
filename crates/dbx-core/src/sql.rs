@@ -2801,8 +2801,11 @@ mod tests {
 
     #[test]
     fn mysql_split_skips_comment_only_statement() {
-        assert!(split_sql_statements_for_database("-- Arch-GPT DB SQL preview crash reproducer\n\n;", DatabaseType::Mysql)
-            .is_empty());
+        assert!(split_sql_statements_for_database(
+            "-- Arch-GPT DB SQL preview crash reproducer\n\n;",
+            DatabaseType::Mysql
+        )
+        .is_empty());
     }
 
     #[test]

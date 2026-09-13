@@ -1547,10 +1547,10 @@ fn merge_missing_tunnel_profile_secrets(profile: &mut TransportLayerConfig, prev
                 current.key_passphrase = previous.key_passphrase.clone();
             }
         }
-        (TransportLayerConfig::Proxy(current), TransportLayerConfig::Proxy(previous)) => {
-            if current.password.is_empty() {
-                current.password = previous.password.clone();
-            }
+        (TransportLayerConfig::Proxy(current), TransportLayerConfig::Proxy(previous))
+            if current.password.is_empty() =>
+        {
+            current.password = previous.password.clone();
         }
         (TransportLayerConfig::HttpTunnel(current), TransportLayerConfig::HttpTunnel(previous))
             if current.token.is_empty() =>
@@ -2625,9 +2625,8 @@ fn ensure_mcp_connection_change_allowed_in_tx(
 ) -> Result<(), String> {
     let policy = load_mcp_global_policy_in_tx(tx)?;
     if policy.read_only {
-        return Err(
-            "MCP_READ_ONLY: Arch-GPT DB global MCP read-only mode is enabled. Connection changes are blocked.".to_string()
-        );
+        return Err("MCP_READ_ONLY: Arch-GPT DB global MCP read-only mode is enabled. Connection changes are blocked."
+            .to_string());
     }
     if let Some(connection_id) = target_connection_id {
         if policy.allowed_connection_ids.as_ref().is_some_and(|ids| !ids.iter().any(|id| id == connection_id)) {

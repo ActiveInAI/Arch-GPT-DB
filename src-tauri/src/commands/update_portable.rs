@@ -346,7 +346,10 @@ mod tests {
     #[test]
     fn builds_portable_asset_names_for_windows_architectures() {
         assert_eq!(portable_asset_name("0.5.64", "x86_64").unwrap(), "Arch-GPT DB_0.5.64_x64-portable.zip");
-        assert_eq!(portable_asset_name("v0.5.64-beta.1", "aarch64").unwrap(), "Arch-GPT DB_0.5.64-beta.1_arm64-portable.zip");
+        assert_eq!(
+            portable_asset_name("v0.5.64-beta.1", "aarch64").unwrap(),
+            "Arch-GPT DB_0.5.64-beta.1_arm64-portable.zip"
+        );
         assert!(portable_asset_name("0.5.64", "x86").is_err());
         assert!(portable_asset_name("../../0.5.64", "x86_64").is_err());
     }

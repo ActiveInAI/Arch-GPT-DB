@@ -746,9 +746,12 @@ mod tests {
         assert_eq!(client.org.as_deref(), Some("Arch-GPT DB Org"));
         assert_eq!(
             build_v2_buckets_url(&client, 0).unwrap(),
-            "http://localhost:8086/api/v2/buckets?org=Arch-GPT DB%20Org&limit=100&offset=0"
+            "http://localhost:8086/api/v2/buckets?org=Arch%2DGPT%20DB%20Org&limit=100&offset=0"
         );
-        assert_eq!(build_v2_query_url(&client).unwrap(), "http://localhost:8086/api/v2/query?org=Arch-GPT DB%20Org");
+        assert_eq!(
+            build_v2_query_url(&client).unwrap(),
+            "http://localhost:8086/api/v2/query?org=Arch%2DGPT%20DB%20Org"
+        );
     }
 
     #[test]

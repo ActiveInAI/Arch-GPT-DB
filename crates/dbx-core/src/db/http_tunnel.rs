@@ -227,7 +227,7 @@ fn authorized_request(endpoint: &HttpTunnelEndpoint, builder: reqwest::RequestBu
     }
     match HeaderValue::from_str(&endpoint.token) {
         Ok(token) => builder
-            .header("X-Arch-GPT DB-Tunnel-Token", token.clone())
+            .header("X-Arch-GPT-DB-Tunnel-Token", token.clone())
             .header(AUTHORIZATION, format!("Bearer {}", endpoint.token)),
         Err(_) => builder,
     }
@@ -395,11 +395,15 @@ mod tests {
     async fn handle_mock_http_request(stream: TcpStream, buffered: Arc<Mutex<Vec<u8>>>, closed: Arc<Notify>) {
         let mut reader = BufReader::new(stream);
         let mut request_line = String::new();
-        reader.read_line(&mut request_line).await.unwrap();
+        if reader.read_line(&mut request_line).await.is_err() {
+            return;
+        }
         let mut content_length = 0_usize;
         loop {
             let mut line = String::new();
-            reader.read_line(&mut line).await.unwrap();
+            if reader.read_line(&mut line).await.is_err() {
+                return;
+            }
             let trimmed = line.trim_end();
             if trimmed.is_empty() {
                 break;
@@ -410,7 +414,9 @@ mod tests {
             }
         }
         let mut body = vec![0_u8; content_length];
-        reader.read_exact(&mut body).await.unwrap();
+        if reader.read_exact(&mut body).await.is_err() {
+            return;
+        }
         let mut stream = reader.into_inner();
         if request_line.contains("dbx_action=write") {
             buffered.lock().await.extend_from_slice(&body);
@@ -421,6 +427,10 @@ mod tests {
                 std::mem::take(&mut *buffered)
             };
             if bytes.is_empty() {
+                // The real script holds an empty read for `dbx_wait_ms`.
+                // Throttle the fixture too so a tight local polling loop
+                // does not exhaust the mock listener between writes.
+                tokio::time::sleep(Duration::from_millis(1)).await;
                 write_http_response(&mut stream, "204 No Content", b"").await;
             } else {
                 write_http_response(&mut stream, "200 OK", &bytes).await;

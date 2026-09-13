@@ -248,7 +248,7 @@ jobs:
       - name: Build frontend
         run: pnpm build
 
-      - name: Build PanDB for Windows 7
+      - name: Build Arch-GPT DB for Windows 7
         shell: pwsh
         run: |
           $env:TAURI_CONFIG = Get-Content src-tauri/tauri.webview2-win7-fixed.conf.json -Raw
@@ -283,7 +283,7 @@ jobs:
       - name: Upload Windows 7 test installer
         uses: actions/upload-artifact@v4
         with:
-          name: PanDB-win7-fixed-runtime-test
+          name: arch-gpt-db-win7-fixed-runtime-test
           path: target/x86_64-win7-windows-msvc/release/bundle/nsis/*.exe
           if-no-files-found: error
           retention-days: 7
@@ -344,8 +344,8 @@ jobs:
       RUSTC_WRAPPER: sccache
       # The fast lane skips only system font discovery while retaining the other default capabilities.
       RUST_FEATURE_MODE: ${{ github.event_name == 'pull_request' && needs.changes.outputs.rust_full != 'true' && 'fast' || 'full' }}
-      RUST_FAST_FEATURES: dbx/duckdb-sidecar,dbx/dynamodb,dbx/mq-admin,dbx/sqlite-sqlcipher,dbx-core/duckdb-sidecar,dbx-core/dynamodb,dbx-core/mq-admin,dbx-core/sqlite-sqlcipher,dbx-web/duckdb-sidecar,dbx-web/dynamodb,dbx-web/mq-admin,dbx-web/sqlite-sqlcipher
-      RUST_FULL_FEATURES: dbx/duckdb-sidecar,dbx/dynamodb,dbx/mq-admin,dbx/sqlite-sqlcipher,dbx/system-fonts,dbx-core/duckdb-sidecar,dbx-core/dynamodb,dbx-core/mq-admin,dbx-core/sqlite-sqlcipher,dbx-core/system-fonts,dbx-web/duckdb-sidecar,dbx-web/dynamodb,dbx-web/mq-admin,dbx-web/sqlite-sqlcipher,dbx-web/system-fonts
+      RUST_FAST_FEATURES: dbx/duckdb-sidecar,dbx/sqlite-sqlcipher,dbx-core/duckdb-sidecar,dbx-core/sqlite-sqlcipher,dbx-web/duckdb-sidecar,dbx-web/sqlite-sqlcipher
+      RUST_FULL_FEATURES: dbx/duckdb-sidecar,dbx/sqlite-sqlcipher,dbx/system-fonts,dbx-core/duckdb-sidecar,dbx-core/sqlite-sqlcipher,dbx-core/system-fonts,dbx-web/duckdb-sidecar,dbx-web/sqlite-sqlcipher,dbx-web/system-fonts
       # Fork PRs cannot read repository secrets, so retain the GHA backend for them.
       SCCACHE_GHA_ENABLED: ${{ secrets.SCCACHE_S3_BUCKET == '' && 'true' || 'false' }}
     steps:
@@ -405,7 +405,9 @@ jobs:
           save-if: ${{ github.ref == 'refs/heads/main' }}
 
       - name: Cargo fmt check
-        run: cargo fmt --check
+        run: |
+          git ls-files -z -- 'src-tauri/*.rs' 'src-tauri/**/*.rs' 'crates/**/*.rs' \
+            | xargs -0 -r rustfmt --edition 2021 --check
 
       - name: Cargo clippy
         run: |
@@ -430,8 +432,8 @@ jobs:
       RUSTC_WRAPPER: sccache
       # The fast lane skips only system font discovery while retaining the other default capabilities.
       RUST_FEATURE_MODE: ${{ github.event_name == 'pull_request' && needs.changes.outputs.rust_full != 'true' && 'fast' || 'full' }}
-      RUST_FAST_FEATURES: dbx/duckdb-sidecar,dbx/dynamodb,dbx/mq-admin,dbx/sqlite-sqlcipher,dbx-core/duckdb-sidecar,dbx-core/dynamodb,dbx-core/mq-admin,dbx-core/sqlite-sqlcipher,dbx-web/duckdb-sidecar,dbx-web/dynamodb,dbx-web/mq-admin,dbx-web/sqlite-sqlcipher
-      RUST_FULL_FEATURES: dbx/duckdb-sidecar,dbx/dynamodb,dbx/mq-admin,dbx/sqlite-sqlcipher,dbx/system-fonts,dbx-core/duckdb-sidecar,dbx-core/dynamodb,dbx-core/mq-admin,dbx-core/sqlite-sqlcipher,dbx-core/system-fonts,dbx-web/duckdb-sidecar,dbx-web/dynamodb,dbx-web/mq-admin,dbx-web/sqlite-sqlcipher,dbx-web/system-fonts
+      RUST_FAST_FEATURES: dbx/duckdb-sidecar,dbx/sqlite-sqlcipher,dbx-core/duckdb-sidecar,dbx-core/sqlite-sqlcipher,dbx-web/duckdb-sidecar,dbx-web/sqlite-sqlcipher
+      RUST_FULL_FEATURES: dbx/duckdb-sidecar,dbx/sqlite-sqlcipher,dbx/system-fonts,dbx-core/duckdb-sidecar,dbx-core/sqlite-sqlcipher,dbx-core/system-fonts,dbx-web/duckdb-sidecar,dbx-web/sqlite-sqlcipher,dbx-web/system-fonts
       # Fork PRs cannot read repository secrets, so retain the GHA backend for them.
       SCCACHE_GHA_ENABLED: ${{ secrets.SCCACHE_S3_BUCKET == '' && 'true' || 'false' }}
     steps:
@@ -1031,7 +1033,7 @@ jobs:
             name="dbx-cassandra-${version//./-}"
             docker rm -fv "$name" >/dev/null 2>&1 || true
             docker run -d --name "$name" \
-              -e CASSANDRA_CLUSTER_NAME="PanDB Cassandra CI $version" \
+              -e CASSANDRA_CLUSTER_NAME="Arch-GPT DB Cassandra CI $version" \
               -e CASSANDRA_DC=dc1 \
               -e CASSANDRA_RACK=rack1 \
               -e CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch \

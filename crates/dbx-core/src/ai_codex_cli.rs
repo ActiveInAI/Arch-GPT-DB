@@ -1023,7 +1023,9 @@ fn classify_codex_run_error(stderr: &str) -> String {
     if lower.contains("not authenticated") || lower.contains("login") || lower.contains("auth") {
         format!("[codexNotAuthenticated] Codex CLI is not authenticated. Run `codex login` and try again. {stderr}")
     } else if lower.contains("dbx-mcp-server") || lower.contains("enoent") {
-        format!("[dbxMcpMissing] Arch-GPT DB MCP server was not found. Install @dbx-app/mcp-server and try again. {stderr}")
+        format!(
+            "[dbxMcpMissing] Arch-GPT DB MCP server was not found. Install @dbx-app/mcp-server and try again. {stderr}"
+        )
     } else if lower.contains("mcp") && (lower.contains("dbx") || lower.contains("server")) {
         format!("[codexMcpStartupFailed] Codex could not start the Arch-GPT DB MCP server. {stderr}")
     } else {

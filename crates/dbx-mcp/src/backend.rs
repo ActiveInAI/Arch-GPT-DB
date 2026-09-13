@@ -398,7 +398,9 @@ impl WebBackend {
             return Ok(());
         }
         if self.password.is_empty() {
-            return Err("Arch-GPT DB Web authentication is required. Set DBX_WEB_PASSWORD for MCP Web mode.".to_string());
+            return Err(
+                "Arch-GPT DB Web authentication is required. Set DBX_WEB_PASSWORD for MCP Web mode.".to_string()
+            );
         }
         let mut request = self.client.post(format!("{}/api/auth/login", self.base_url));
         for (name, value) in &self.headers {
@@ -787,9 +789,8 @@ impl DbxBackend for WebBackend {
                 return Err(format!("Unsupported Arch-GPT DB Web agent tool: {tool_name}"));
             }
             if connection.db_type == DatabaseType::MongoDb {
-                return Err(
-                    "MongoDB shell commands in Arch-GPT DB Web mode are not implemented by the Rust MCP yet.".to_string()
-                );
+                return Err("MongoDB shell commands in Arch-GPT DB Web mode are not implemented by the Rust MCP yet."
+                    .to_string());
             }
             self.ensure_connected(connection).await?;
             let sql = arguments.get("sql").and_then(Value::as_str).ok_or("Missing SQL query")?;
@@ -873,7 +874,9 @@ impl DbxBackend for WebBackend {
         _timeout_secs: Option<u64>,
     ) -> Result<dbx_core::db::QueryResult, String> {
         if connection.db_type == DatabaseType::MongoDb {
-            return Err("MongoDB shell commands in Arch-GPT DB Web mode are not implemented by the Rust CLI yet.".to_string());
+            return Err(
+                "MongoDB shell commands in Arch-GPT DB Web mode are not implemented by the Rust CLI yet.".to_string()
+            );
         }
         self.ensure_connected(connection).await?;
         self.request(
@@ -2833,8 +2836,10 @@ mod tests {
             plugin_store_dir: Some("D:/Arch-GPT DB/plugins-custom".to_string()),
             ..DesktopSettings::default()
         };
-        let legacy =
-            DesktopSettings { driver_store_dir: Some("D:/Arch-GPT DB/drivers".to_string()), ..DesktopSettings::default() };
+        let legacy = DesktopSettings {
+            driver_store_dir: Some("D:/Arch-GPT DB/drivers".to_string()),
+            ..DesktopSettings::default()
+        };
 
         assert_eq!(local_plugin_dir(&explicit, data_dir), PathBuf::from("D:/Arch-GPT DB/plugins-custom"));
         assert_eq!(local_plugin_dir(&legacy, data_dir), PathBuf::from("D:/Arch-GPT DB/drivers/plugins"));

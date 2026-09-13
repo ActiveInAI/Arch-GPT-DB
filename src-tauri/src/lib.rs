@@ -806,8 +806,10 @@ fn setup_desktop_tray<R: tauri::Runtime, M: Manager<R>>(
     _icon_theme: DesktopIconTheme,
 ) -> tauri::Result<()> {
     let menu = build_tray_menu(manager)?;
-    let mut tray =
-        TrayIconBuilder::<R>::with_id(DESKTOP_TRAY_ID).tooltip("Arch-GPT DB").menu(&menu).show_menu_on_left_click(false);
+    let mut tray = TrayIconBuilder::<R>::with_id(DESKTOP_TRAY_ID)
+        .tooltip("Arch-GPT DB")
+        .menu(&menu)
+        .show_menu_on_left_click(false);
     #[cfg(target_os = "macos")]
     {
         tray = tray.icon(MACOS_TRAY_ICON).icon_as_template(true);
@@ -1381,7 +1383,10 @@ mod tests {
             ),
             None
         );
-        assert_eq!(linux_appimage_wayland_backend_override(Some(OsStr::new("/tmp/Arch-GPT DB.AppImage")), None, None), None);
+        assert_eq!(
+            linux_appimage_wayland_backend_override(Some(OsStr::new("/tmp/Arch-GPT DB.AppImage")), None, None),
+            None
+        );
         assert_eq!(linux_appimage_wayland_backend_override(None, Some(OsStr::new("wayland-0")), None), None);
     }
 }
